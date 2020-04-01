@@ -2,16 +2,21 @@
 #include <allegro5\allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 
+
+#define defaultSmellRadius 30
+#define defaultDeathProb 0.3
 using namespace std;
 
-#define FPS 10.0
-
 //Simulation constructor.
-Simulation::Simulation(void) {
+Simulation::Simulation(unsigned int width_, unsigned int height_, double FPS_, unsigned int blobAmount_, 
+	unsigned int generalMaxSpeed_, unsigned int generalRelativeSpeed_, int mode_) : 
 
-	this->graphicControl = new (nothrow) GraphicClass(this->width, this->height);
-	this->timeControl = new (nothrow) TimeClass();
-	this->eventControl = new (nothrow) EventClass();
+	width(width_), height(height_), FPS(FPS_), blobAmount(blobAmount_), generalMaxSpeed(generalMaxSpeed_),
+	generalRelativeSpeed(generalRelativeSpeed_), mode(mode_){
+
+	this->graphicControl = nullptr;
+	this->timeControl = nullptr;
+	this->eventControl = nullptr;
 }
 
 bool Simulation::initializeAll(void) {
@@ -22,9 +27,6 @@ bool Simulation::initializeAll(void) {
 		cout << "Failed to initialize Allegro.\n";
 		result = false;
 	}
-
-	//Sets timer to  default FPS.
-	timeControl->setTimer();
 
 	/*Initialization of graphic resources. Checks for errors.
 	True parameter indicates to create a new display. */
@@ -67,6 +69,13 @@ bool Simulation::setSimulation(bool displayCreation) {
 	
 	bool result = true;
 
+	this->graphicControl = new (nothrow) GraphicClass(this->width, this->height);
+	this->eventControl = new (nothrow) EventClass();
+	this->timeControl = new (nothrow) TimeClass();
+	if (!graphicControl) {
+		cout << "Failed to create graphic pointer\n";
+		result = false;
+	}
 	//Attempts to create event queue.
 	if (!eventControl->createEventQueue()) {
 		cout << "Failed to create event queue\n";
@@ -74,7 +83,7 @@ bool Simulation::setSimulation(bool displayCreation) {
 	}
 
 	//Attempts to create timer.
-	else if (!timeControl->createTimer()) {
+	else if (!timeControl->createTimer(1/this->FPS)) {
 		cout << "Failed to create timer\n";
 		result = false;
 	}
@@ -105,7 +114,8 @@ bool Simulation::setSimulation(bool displayCreation) {
 	}
 
 	//Sets event source for timer.
-	al_register_event_source(eventControl->getQueue(), al_get_timer_event_source(timeControl->getTimer()));
+	if (result)
+		al_register_event_source(eventControl->getQueue(), al_get_timer_event_source(timeControl->getTimer()));
 
 	return result;
 }

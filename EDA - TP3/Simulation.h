@@ -5,22 +5,26 @@
 #include "BabyBlob.h"
 
 
+#define MAXBLOBAMOUNT 50
 //Temporary values to check correct initialization.
 /**************************************************/
 #define defaultDisplay false
-#define MAXBLOBAMOUNT 50
+
 #define defaultWidth 800
 #define defaultHeight 800
+#define defaultFPS 10.0
+#define defaultBlobAmount 10
+#define defaultMaxSpeed (int)(defaultWidth/40)
 #define defaultRelativeSpeed 0.5
-#define defaultMaxSpeed width/40
-#define defaultSmellRadius width/30
-#define defaultDeathProb 0.3
+#define defaultMode 1
 /**************************************************/
 class Simulation {
 public:
 
 	//Simulation constructor.
-	Simulation();
+	Simulation(unsigned int width_ = defaultWidth, unsigned int height_ = defaultHeight, double FPS_ = defaultFPS,
+		unsigned int blobAmount_ = defaultBlobAmount,unsigned int generalMaxSpeed_ = defaultMaxSpeed,
+		unsigned int generalRelativeSpeed_ = defaultRelativeSpeed,int mode_ = defaultMode);
 
 	bool setSimulation(bool displayCreation = defaultDisplay);
 
@@ -52,4 +56,6 @@ private:
 
 	//For mode 2.
 	float generalRelativeSpeed;
+
+	double FPS;
 };
