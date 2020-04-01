@@ -1,0 +1,12 @@
+﻿  BabyBlob.cpp
+  Blob.cpp
+  EventClass.cpp
+  GoodOldBlob.cpp
+  GraphicClass.cpp
+  GrownBlob.cpp
+  Simulation.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(94,21): warning C4018: '<': no coinciden signed/unsigned
+  TimeClass.cpp
+  main.cpp
+  Generando código...
+  EDA - TP3.vcxproj -> C:\Users\alanv\source\repos\EDA - TP3\Debug\EDA - TP3.exe
