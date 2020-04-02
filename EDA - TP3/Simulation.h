@@ -16,14 +16,14 @@
 #define defaultWidth 900
 #define defaultHeight 470
 #define defaultFPS 11.0
-#define defaultBlobAmount 20
+#define defaultBlobAmount 15
 #define defaultMaxSpeed 30
 #define defaultRelativeSpeed 0.5
 #define defaultMode 1
-#define defaultFoodAmount 15
+#define defaultFoodAmount 10
 #define defaultSmellRadius 150
-#define defaultDeathProb 0.001
-#define randomJiggle 0.5
+#define defaultDeathProb 0.005
+#define randomJiggle 0.1
 /**************************************************/
 class Simulation {
 public:
@@ -54,11 +54,7 @@ public:
 
 	void drawAccordingBitmap(Blob* thisBlob);
 
-
 	void moveCycle(void);
-
-	void mustMerge(void);
-	void actuallyMerge(void);
 	
 	bool blobBirth(void);
 	void blobDeath(int index);

@@ -1,17 +1,1 @@
-﻿  Simulation.cpp
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(159,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(173,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(199,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(207,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(211,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(191,8): warning C4101: 'xPos': variable local sin referencia
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(191,14): warning C4101: 'yPos': variable local sin referencia
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(267,21): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(282,27): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(349,24): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(363,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(368,20): warning C4018: '<': no coinciden signed/unsigned
-  main.cpp
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\main.cpp(19,17): warning C4129: '.': secuencia de escape de carácter no reconocida
-  Generando código...
-  EDA - TP3.vcxproj -> C:\Users\alanv\source\repos\EDA - TP3\Debug\EDA - TP3.exe
+﻿  EDA - TP3.vcxproj -> C:\Users\alanv\source\repos\EDA - TP3\Debug\EDA - TP3.exe
