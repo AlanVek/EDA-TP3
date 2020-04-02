@@ -23,6 +23,7 @@ GrownBlob::GrownBlob(Blob* otherBlob, float randomJ) {
 	this->smellRadius = otherBlob->getSmellRadius();
 	this->foodEaten = 0;
 	this->bitmapWidth = GROWNBITWIDTH;
+	this->deathProb = otherBlob->getDeathProb();
 }
 
 GrownBlob::~GrownBlob() {}

@@ -46,6 +46,8 @@ public:
 
 	float getBitmapWidth(void);
 
+	float getDeathProb(void);
+
 
 protected:
 	Position position;

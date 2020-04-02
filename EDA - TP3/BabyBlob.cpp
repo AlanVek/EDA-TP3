@@ -23,6 +23,7 @@ BabyBlob::BabyBlob(Blob* otherBlob, float randomJ) {
 	this->smellRadius = otherBlob->getSmellRadius();
 	this->foodEaten = 0;
 	this->bitmapWidth = BABYBITWIDTH;
+	this->deathProb = otherBlob->getDeathProb();
 }
 
 BabyBlob::~BabyBlob() {};

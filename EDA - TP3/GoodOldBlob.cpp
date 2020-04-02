@@ -23,6 +23,7 @@ GoodOldBlob::GoodOldBlob(Blob* otherBlob, float randomJ) {
 	this->smellRadius = otherBlob->getSmellRadius();
 	this->foodEaten = 0;
 	this->bitmapWidth = GOODOLDBITWIDTH;
+	this->deathProb = otherBlob->getDeathProb();
 }
 
 GoodOldBlob::~GoodOldBlob() {}

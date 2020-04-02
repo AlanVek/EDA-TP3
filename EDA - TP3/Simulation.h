@@ -8,7 +8,7 @@
 
 
 #define MAXBLOBAMOUNT 500
-#define FOODAMOUNT 10
+#define FOODAMOUNT 100
 //Temporary values to check correct initialization.
 /**************************************************/
 #define defaultDisplay true
@@ -16,13 +16,13 @@
 #define defaultWidth 900
 #define defaultHeight 470
 #define defaultFPS 11.0
-#define defaultBlobAmount 15
+#define defaultBlobAmount 20
 #define defaultMaxSpeed 30
 #define defaultRelativeSpeed 0.5
 #define defaultMode 1
 #define defaultFoodAmount 15
-#define defaultSmellRadius 50
-#define defaultDeathProb 0.01
+#define defaultSmellRadius 150
+#define defaultDeathProb 0.001
 #define randomJiggle 0.5
 /**************************************************/
 class Simulation {
@@ -69,14 +69,14 @@ public:
 private:
 
 	//Datos miembro de Simulation.
+	unsigned int blobAmount, foodAmount;
+	unsigned int width, height;
+	int mode;
+
 	GraphicClass* graphicControl;
 	TimeClass* timeControl;
 	EventClass* eventControl;
 	Blob* allBlobs[MAXBLOBAMOUNT];
-
-	unsigned int blobAmount,foodAmount;
-	unsigned int width, height;
-	int mode;
 
 	//For mode 1.
 	unsigned int generalMaxSpeed;

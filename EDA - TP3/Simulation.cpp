@@ -141,7 +141,7 @@ void Simulation::destroyAll() {
 
 	deleteArray < Blob* > (this->allBlobs, this->blobAmount);
 
-	deleteArray< Food* > (this->foodVector, this->foodAmount);
+	deleteArray < Food* > (this->foodVector, this->foodAmount);
 }
 
 
@@ -186,7 +186,6 @@ bool Simulation::initializeBlob() {
 }
 
 
-
 void Simulation::moveCycle(void) {
 
 	float xPos, yPos;
@@ -201,7 +200,6 @@ void Simulation::moveCycle(void) {
 		if (this->allBlobs[i]->checkBlobDeath()) {
 			this->blobDeath(i);
 			i--;
-			cout << "Death\n";
 		}
 	}
 
@@ -256,6 +254,7 @@ void Simulation::drawAccordingBitmap(Blob* thisBlob) {
 }
 
 
+//Checks for overlapped same-age-group blobs and blobMerges them.
 void Simulation::Merges() {
 
 	float xPos1, xPos2;

@@ -164,13 +164,12 @@ void Blob::hasMerged(int thisMerge) {
 
 //Class getters.
 float Blob::getMaxSpeed(void) { return this->maxSpeed; }
-
 float Blob::getRelativeSpeed(void) { return this->relativeSpeed; }
-
 float Blob::getAngle(void) { return this->angle; }
 int Blob::getSmellRadius(void) { return this->smellRadius; }
-
 float Blob::getBitmapWidth(void) { return this->bitmapWidth; }
+float Blob::getDeathProb(void) { return this->deathProb; }
+
 
 
 //Finds the food that is closest to blob.
