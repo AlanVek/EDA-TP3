@@ -1,15 +1,7 @@
-﻿  Blob.cpp
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(11,88): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(12,88): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(13,83): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(17,24): warning C4244: '=': conversión de 'unsigned int' a 'float'; posible pérdida de datos
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(18,19): warning C4244: '=': conversión de 'unsigned int' a 'float'; posible pérdida de datos
-  Food.cpp
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(6,84): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(7,84): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-  GraphicClass.cpp
-  Simulation.cpp
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(180,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(194,20): warning C4018: '<': no coinciden signed/unsigned
-  Generando código...
+﻿  Simulation.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(185,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(199,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(240,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(247,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(254,20): warning C4018: '<': no coinciden signed/unsigned
   EDA - TP3.vcxproj -> C:\Users\alanv\source\repos\EDA - TP3\Debug\EDA - TP3.exe

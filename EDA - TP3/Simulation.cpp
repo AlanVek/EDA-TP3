@@ -3,6 +3,11 @@
 //#include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_image.h>
 
+#include <typeinfo>
+#include "GrownBlob.h"
+#include "GoodOldBlob.h"
+#include "BabyBlob.h"
+
 #define foodBitmap "food.png"
 
 #define defaultSmellRadius 30
@@ -12,7 +17,7 @@ using namespace std;
 
 //Simulation constructor.
 Simulation::Simulation(unsigned int width_, unsigned int height_, double FPS_, unsigned int blobAmount_, 
-	unsigned int generalMaxSpeed_, unsigned int generalRelativeSpeed_, int mode_, int foodAmount_) : 
+	unsigned int generalMaxSpeed_, float generalRelativeSpeed_, int mode_, int foodAmount_) : 
 
 	width(width_), height(height_), FPS(FPS_), blobAmount(blobAmount_), generalMaxSpeed(generalMaxSpeed_),
 	generalRelativeSpeed(generalRelativeSpeed_), mode(mode_), foodAmount(foodAmount_){
@@ -189,16 +194,19 @@ bool Simulation::initializeFood (){
 
 //Creates blobs, loads bitmaps and draws them.
 bool Simulation::initializeBlob() {
-
+	float xPos, yPos;
 	bool result = true;
 	for (int i = 0; i < this->blobAmount; i++) {
-		if (!(this->allBlobs[i] = new (nothrow) BabyBlob(this->width, this->height, this->generalRelativeSpeed, this->generalMaxSpeed,
-			defaultSmellRadius, defaultDeathProb)))
+		
+		if (!(this->allBlobs[i] = new (nothrow) BabyBlob(this->width, this->height, this->generalRelativeSpeed,
+			this->generalMaxSpeed, defaultSmellRadius, defaultDeathProb)))
 			result = false;
 
-		else
-			this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getBabyBit(), 
-				this->allBlobs[i]->getBlobPosition()->x, this->allBlobs[i]->getBlobPosition()->y);
+		else {
+			xPos = this->allBlobs[i]->getBlobPosition()->x;
+			yPos = this->allBlobs[i]->getBlobPosition()->y;
+			this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getBabyBit(), xPos, yPos);
+		}
 	}
 	return result;
 }
@@ -217,4 +225,64 @@ void Simulation::deleteFood(int index) {
 		if (this->foodVector[i])
 			delete foodVector[i];
 	}
+}
+
+
+
+void Simulation::moveCycle(void) {
+
+	float xPos, yPos;
+	
+	//Draws background first (to cover everything).
+	this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getBackgrBit(), 0, 0);
+
+	//For every blob, it smells for food (and adjusts angles).
+	for (int i = 0; i < this->blobAmount; i++) {
+		this->allBlobs[i]->blobSmell(this->foodVector, this->foodAmount);
+
+		//this->allBlobs[i]->blobCheckMerge(this->allBlobs, this->blobAmount);
+	}
+
+	//Separately, so as to first finish calculations, the blobs move.
+	for (int i = 0; i < this->blobAmount; i++) {
+		this->allBlobs[i]->blobMove(this->width, this->height);
+		this->drawAccordingBitmap(allBlobs[i]);
+	}
+
+	//Lastly, the food is redrawn.
+
+	for (int i = 0; i < this->foodAmount; i++) {
+
+		xPos = this->foodVector[i]->getXPosit();
+		yPos = this->foodVector[i]->getYPosit();
+
+		this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getFoodBit(), xPos, yPos);
+	}
+
+	al_flip_display();
+}
+
+void Simulation::drawAccordingBitmap(Blob* thisBlob) {
+
+	BabyBlob test1;
+	GrownBlob test2;
+	GoodOldBlob test3;
+	
+	
+	float xPos = thisBlob->getBlobPosition()->x;
+	float yPos = thisBlob->getBlobPosition()->y;
+
+	float typeID = typeid (*thisBlob).hash_code();
+
+	//If it's a BabyBlob, it draws the babyBit. 
+	if (typeID == typeid(test1).hash_code()) {
+		this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getBabyBit(), xPos, yPos);
+	}
+	else if (typeID == typeid(test2).hash_code()) {
+		this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getGrownBit(),xPos, yPos);
+	}
+	else if (typeID == typeid(test3).hash_code()) {
+		this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getBabyBit(),xPos, yPos);
+	}
+
 }

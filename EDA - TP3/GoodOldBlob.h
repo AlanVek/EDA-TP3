@@ -2,7 +2,9 @@
 #include "Blob.h"
 class GoodOldBlob : public Blob{
 public:
-	GoodOldBlob(unsigned int screenWidth, unsigned int screenHeight, unsigned int speed_, 
+	GoodOldBlob(unsigned int screenWidth, unsigned int screenHeight, float relativeSpeed_, 
 		unsigned int maxSpeed_, unsigned int smellRadius_, float deathProb_);
+
+	GoodOldBlob();
 };
 

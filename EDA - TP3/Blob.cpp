@@ -4,7 +4,11 @@
 #define MAX_ANGLE 360
 #define babyBit "babyblob.png"
 //Blob constructor.
-Blob::Blob(unsigned int screenWidth, unsigned int screenHeight, unsigned int relativeSpeed_,
+
+Blob::Blob() {};
+
+
+Blob::Blob(unsigned int screenWidth, unsigned int screenHeight, float relativeSpeed_,
 	unsigned int maxSpeed_,unsigned int smellRadius_, float deathProb_) {
 	
 	//Generates random X and Y position, and random angle.
@@ -36,13 +40,16 @@ bool Blob::checkFoodEaten(void) {
 }
 
 //Updates blob position.
-void Blob::blobMove(void) {
-	this->position.x = this->maxSpeed * this->relativeSpeed * cos(this->angle);
-	this->position.y = this->maxSpeed * this->relativeSpeed * sin(this->angle);
+void Blob::blobMove(unsigned int width_, unsigned int height_) {
+	this->position.x += this->maxSpeed * this->relativeSpeed * cos(this->angle);
+	this->position.y += this->maxSpeed * this->relativeSpeed * sin(this->angle);
+
+	//After moving, corrects final position.
+	this->blobCorrectMovement(width_, height_);
 }
 
 //Checks for food within smellRadius.
-void Blob::blobSmell(Food* foodVector_, int lenght) {
+void Blob::blobSmell(Food** foodVector_, int lenght) {
 	Position temp;
 	float xDist, yDist;
 
@@ -50,8 +57,8 @@ void Blob::blobSmell(Food* foodVector_, int lenght) {
 	for (int i = 0; i < lenght; i++) {
 
 		//Gets food position.
-		temp.x = (foodVector_+i)->getXPosit();
-		temp.y = (foodVector_+i)->getYPosit();
+		temp.x = foodVector_[i]->getXPosit();
+		temp.y = foodVector_[i]->getYPosit();
 
 		//Defines distances.
 		xDist = (temp.x - position.x);
@@ -65,3 +72,17 @@ void Blob::blobSmell(Food* foodVector_, int lenght) {
 
 //Gets blob's position.
 Position* Blob::getBlobPosition(void) { return &this->position; }
+
+void Blob::blobCorrectMovement(unsigned int width_, unsigned int height_) {
+	if (this->position.x >= width_)
+		this->position.x -= width_;
+	else if (this->position.x <= 0)
+		this->position.x += width_;
+
+	if (this->position.y >= height_)
+		this->position.y -= height_;
+	else if (this->position.y <= 0)
+		this->position.y += height_;
+}
+
+Blob::~Blob() {};

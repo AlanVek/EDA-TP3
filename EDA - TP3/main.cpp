@@ -31,13 +31,17 @@ int main()
         }
     }
     mySim->getTimeControl()->startTimer();
+
+    int suma = 0;
     while (result && !endOfInput) {
         if (mySim->getEventControl()->getNextEventType() == ALLEGRO_EVENT_TIMER) {
-            //mySim->moveCycle();
+            mySim->moveCycle();
         }
-        al_rest(5);
-        endOfInput = true;
-        
+        al_rest(2); 
+        suma++;
+        if (suma == 4) {
+            break;
+        }
     }
 
     mySim->destroyAll();

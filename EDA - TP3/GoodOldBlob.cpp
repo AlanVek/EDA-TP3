@@ -2,7 +2,7 @@
 
 #define MAXOLDFOOD 3
 
-GoodOldBlob::GoodOldBlob(unsigned int screenWidth, unsigned int screenHeight, unsigned int relativeSpeed_,
+GoodOldBlob::GoodOldBlob(unsigned int screenWidth, unsigned int screenHeight, float relativeSpeed_,
 	unsigned int maxSpeed_, unsigned int smellRadius_, float deathProb_) :
 
 	Blob(screenWidth, screenHeight, relativeSpeed_, maxSpeed_, smellRadius_, deathProb_) {
@@ -12,3 +12,5 @@ GoodOldBlob::GoodOldBlob(unsigned int screenWidth, unsigned int screenHeight, un
 
 	this->maxFoodAmount = MAXOLDFOOD;
 }
+
+GoodOldBlob::GoodOldBlob() {};

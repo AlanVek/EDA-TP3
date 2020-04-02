@@ -11,20 +11,23 @@ class Blob
 {
 public:
 	
+	Blob();
 	//Class constructor. 
-	Blob(unsigned int screenWidth, unsigned int screenHeight, unsigned int relativeSpeed_, 
+	Blob(unsigned int screenWidth, unsigned int screenHeight, float relativeSpeed_, 
 		unsigned int maxSpeed_, unsigned int smellRadius_, float deathProb_);
 			
 	void blobDeath(void);
 	bool blobFeeding(void);
 	bool checkFoodEaten(void);
-	void blobMove(void);
+	void blobMove(unsigned int width_, unsigned int height_);
 	bool checkIfMerge(void);
-	void blobCorrectMovement(void);
+	void blobCorrectMovement(unsigned int width_, unsigned int height_);
 	void blobMerge(void);
-	void blobSmell(Food* foodVector_, int lenght);
+	void blobSmell(Food** foodVector_, int lenght);
 
 	Position* getBlobPosition(void);
+
+	virtual ~Blob();
 
 protected:
 	Position position;
