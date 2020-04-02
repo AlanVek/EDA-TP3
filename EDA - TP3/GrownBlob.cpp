@@ -14,4 +14,14 @@ GrownBlob::GrownBlob() {};
 
 GrownBlob::GrownBlob(Blob* otherBlob) {
 	this->position = *otherBlob->getBlobPosition();
+	this->maxSpeed = otherBlob->getMaxSpeed();
+	this->relativeSpeed = otherBlob->getRelativeSpeed();
+	this->angle = otherBlob->getAngle();
+	this->maxFoodAmount = 4;
+	this->smellRadius = 30;
+	this->foodEaten = 0;
+}
+
+GrownBlob::~GrownBlob() {
+	int a = 1 + 2;
 }

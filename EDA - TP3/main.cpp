@@ -36,9 +36,10 @@ int main()
     while (result && !endOfInput) {
         if (mySim->getEventControl()->getNextEventType() == ALLEGRO_EVENT_TIMER) {
             mySim->moveCycle();
-            suma++;
         }
-        if (suma == 500) {
+        if (mySim->getEventControl()->getEvent().type == ALLEGRO_EVENT_KEY_DOWN)
+            break;
+        if (mySim->getBlobAmount() == 0) {
             break;
         }
     }

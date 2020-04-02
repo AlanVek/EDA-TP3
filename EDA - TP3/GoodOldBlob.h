@@ -8,5 +8,6 @@ public:
 	GoodOldBlob();
 
 	GoodOldBlob(Blob* otherBlob);
+	~GoodOldBlob();
 };
 

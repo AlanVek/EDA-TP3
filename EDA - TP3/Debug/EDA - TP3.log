@@ -1,12 +1,16 @@
 ﻿  Simulation.cpp
 C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(159,20): warning C4018: '<': no coinciden signed/unsigned
 C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(173,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(209,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(215,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(219,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(242,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(300,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(330,24): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(200,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(208,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(212,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(192,8): warning C4101: 'xPos': variable local sin referencia
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(192,14): warning C4101: 'yPos': variable local sin referencia
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(270,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(283,24): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(349,24): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(364,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(369,20): warning C4018: '<': no coinciden signed/unsigned
   main.cpp
 C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\main.cpp(19,17): warning C4129: '.': secuencia de escape de carácter no reconocida
   Generando código...

@@ -10,5 +10,7 @@ public:
 	GrownBlob();
 
 	GrownBlob(Blob* otherBlob);
+
+	~GrownBlob();
 };
 

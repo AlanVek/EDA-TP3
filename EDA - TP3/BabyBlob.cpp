@@ -14,5 +14,14 @@ BabyBlob::BabyBlob() {};
 
 BabyBlob::BabyBlob(Blob* otherBlob) {
 	this->position = *otherBlob->getBlobPosition();
+	this->maxSpeed = otherBlob->getMaxSpeed();
+	this->relativeSpeed = otherBlob->getRelativeSpeed();
+	this->angle = otherBlob->getAngle();
+	this-> maxFoodAmount = 5;
+	this->smellRadius = 30;
+	this->foodEaten = 0;
 }
 
+BabyBlob::~BabyBlob() {
+	int a = 1 + 2;
+}

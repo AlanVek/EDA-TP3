@@ -23,17 +23,24 @@ public:
 	int blobFeeding(Food** foodVector_, int amount, int* birthFlag);
 	bool checkFoodEaten(void);
 	void blobMove(unsigned int width_, unsigned int height_);
-	bool checkIfMerge(void);
 	void blobCorrectMovement(unsigned int width_, unsigned int height_);
-	void blobMerge(void);
 	void blobSmell(Food** foodVector_, int lenght);
-	bool checkIfFull(void);
+
+	float getMaxSpeed(void);
+
+	float getRelativeSpeed(void);
+	
+	float getAngle(void);
 
 	Position* getBlobPosition(void);
 
 	virtual ~Blob();
 
-	bool willMerge;
+	void willMerge(Blob* thisBlob);
+
+	void hasMerged(int thisMerge);
+
+	int maxFoodAmount;
 
 protected:
 	Position position;
@@ -49,7 +56,5 @@ protected:
 	int smellRadius;
 	float deathProb;
 	unsigned int foodEaten;
-	bool canMerge;
-	int maxFoodAmount;
 };
 

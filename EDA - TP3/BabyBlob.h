@@ -9,6 +9,8 @@ public:
 
 
 	BabyBlob(Blob* otherBlob);
+
+	~BabyBlob();
 };
 
 

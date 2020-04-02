@@ -7,7 +7,7 @@
 
 
 
-#define MAXBLOBAMOUNT 100
+#define MAXBLOBAMOUNT 500
 #define FOODAMOUNT 10
 //Temporary values to check correct initialization.
 /**************************************************/
@@ -20,9 +20,9 @@
 #define defaultMaxSpeed 30
 #define defaultRelativeSpeed 0.5
 #define defaultMode 1
-#define defaultFoodAmount 1
-#define defaultSmellRadius 400
-#define defaultDeathProb 0.05
+#define defaultFoodAmount 10
+#define defaultSmellRadius 500
+#define defaultDeathProb 0
 /**************************************************/
 class Simulation {
 public:
@@ -56,11 +56,15 @@ public:
 
 	void moveCycle(void);
 
-	void mustMerge(int* mergeVector, int length);
+	void mustMerge(void);
 	void actuallyMerge(void);
 	
 	bool blobBirth(void);
 	void blobDeath(int index);
+
+	void drawItAll(void);
+
+	void Merges(void);
 private:
 
 	//Datos miembro de Simulation.

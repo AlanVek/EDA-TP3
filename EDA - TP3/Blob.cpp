@@ -23,8 +23,6 @@ Blob::Blob(unsigned int screenWidth, unsigned int screenHeight, float relativeSp
 	this->position.y = static_cast <double> ((rand()) / (static_cast <double> (RAND_MAX)) * (screenHeight));
 	this->angle = static_cast <double> ((rand()) / (static_cast <double> (RAND_MAX)) * (MAX_ANGLE));
 	
-	this->willMerge = 0;
-	
 	//Sets given speeds and smellRadius.
 	this->relativeSpeed = relativeSpeed_;
 	this->maxSpeed = maxSpeed_;
@@ -32,10 +30,8 @@ Blob::Blob(unsigned int screenWidth, unsigned int screenHeight, float relativeSp
 	
 	//When "born", all Blobs have eaten 0 food and can merge.
 	this->foodEaten = 0;
-	this->deathProb = deathProb_;
+	this->deathProb = -10;
 
-	//Sets canMerge to default "true" (most likely case scenario).
-	this->canMerge = true;
 }
 
 /*Checks if blob has eaten maxFoodAmount of food.
@@ -123,10 +119,34 @@ int Blob::blobFeeding(Food** foodVector_, int amount, int* birthFlag) {
 bool Blob::checkBlobDeath(void) {
 
 	double specificity = 0.001;
-	double num = specificity * (rand() % (int) (1/specificity));
+
+	int dividend = 1 / specificity;
+
+	double num = specificity * (rand() % dividend);
 
 	return (num < this->deathProb);
 }
 
-Blob::~Blob() {};
+
+void Blob::willMerge(Blob* thisBlob) {
+	this->maxSpeed += thisBlob->maxSpeed;
+	this->relativeSpeed += thisBlob->relativeSpeed;
+	this->angle += thisBlob->angle;
+}
+
+void Blob::hasMerged(int thisMerge) {
+	this->angle /= thisMerge;
+	this->maxSpeed /= thisMerge;
+	this->foodEaten = 0;
+	this->relativeSpeed /= thisMerge;
+}
+float Blob::getMaxSpeed(void) { return this->maxSpeed; }
+
+float Blob::getRelativeSpeed(void) { return this->relativeSpeed; }
+
+float Blob::getAngle(void) { return this->angle; }
+
+Blob::~Blob() {
+	int a = 1 + 3;
+};
 

@@ -5,7 +5,9 @@
 #include "GrownBlob.h"
 #include "GoodOldBlob.h"
 #include "BabyBlob.h"
+#include <allegro5/keyboard.h>
 
+#define radius 15
 
 using namespace std;
 
@@ -55,6 +57,8 @@ bool Simulation::setAllegro(void) {
 		result = false;
 	}
 
+	al_install_keyboard();
+
 	return result;
 }
 
@@ -98,15 +102,11 @@ bool Simulation::setSimulation(bool displayCreation) {
 		result = false;
 	}
 	//Attempts to create bitmaps.
-	else if (!this->getGraphicControl()->initializeBitmaps(this->width, this->height)) {
+	else if (!this->graphicControl->initializeBitmaps(this->width, this->height)) {
 		cout << "Failed to load background bitmaps\n";
 		result = false;
 	}
-	else {
-		//Draws background.
-		this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getBackgrBit(),0,0);
-		al_flip_display();
-	}
+
 	if (result) {
 		//Attempts to Initialize allBlobs to default values (for now) and create bitmaps.
 		if (!(initializeBlob())) {
@@ -124,7 +124,7 @@ bool Simulation::setSimulation(bool displayCreation) {
 	//Sets event source for timer and shows drawings.
 	if (result) {
 		al_register_event_source(this->eventControl->getQueue(), al_get_timer_event_source(this->timeControl->getTimer()));
-		al_flip_display();
+		al_register_event_source(this->eventControl->getQueue(), al_get_keyboard_event_source());
 	}
 	return result;
 }
@@ -160,7 +160,7 @@ bool Simulation::initializeFood (){
 		if (!(this->foodVector[i] = new (nothrow) Food(this->width, this->height)))
 			result = false;
 		else
-			this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getFoodBit(),
+			this->graphicControl->drawBitmap(this->graphicControl->getFoodBit(),
 				this->foodVector[i]->getXPosit(),this->foodVector[i]->getYPosit());
 	}
 	return result;
@@ -193,22 +193,15 @@ void Simulation::moveCycle(void) {
 
 	int hasBeenEaten;
 	//Temporary places to point flags.
-	int a = 0 , b = 0;
+	int a = 0;
+	int* birthFlag = &a;
 
-	//Vector with indexes of positions that must merge.
-	int mergeIndexVector[MAXBLOBAMOUNT] = { 0 };
-	int* mergeFlag = &a;
-	int index = 0;
-	int* birthFlag = &b;
-
-	//Draws background first (to cover everything).
-	this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getBackgrBit(), 0, 0);
-
-	
 	//First, it checks for blobDeaths and adjusts blobAmount accordingly.
 	for (int i = 0; i < this->blobAmount; i++) {
-		if (this->allBlobs[i]->checkBlobDeath())
+		if (this->allBlobs[i]->checkBlobDeath()) {
 			this->blobDeath(i);
+			i--;
+		}
 	}
 
 	//Then, every blob smells for food (and adjusts angles).
@@ -229,23 +222,12 @@ void Simulation::moveCycle(void) {
 			if (!this->blobBirth())
 				cout << "Runtime Error. Failed to create new BabyBlob.\n";
 		}
-
-		/*//Checks for potential blobMerge. 
-		if (*mergeFlag) {
-			//Merges the colliding blobs.
-			this->mustMerge(mergeIndexVector, index);
-		}*/
-		this->drawAccordingBitmap(allBlobs[i]);
 	}
 
-	//Lastly, the food is redrawn.
-	for (int i = 0; i < this->foodAmount; i++) {
+	//Checks for merges and does the necessary changes.
+	this->Merges();
 
-		xPos = this->foodVector[i]->getXPosit();
-		yPos = this->foodVector[i]->getYPosit();
-
-		this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getFoodBit(), xPos, yPos);
-	}
+	this->drawItAll();
 
 	al_flip_display();
 }
@@ -254,83 +236,138 @@ void Simulation::drawAccordingBitmap(Blob* thisBlob) {
 	float xPos = thisBlob->getBlobPosition()->x;
 	float yPos = thisBlob->getBlobPosition()->y;
 
-	float typeID = typeid (*thisBlob).hash_code();
+	BabyBlob temp1;
+	GrownBlob temp2;
+	GoodOldBlob temp3;
+
+	int maxF = thisBlob->maxFoodAmount;
 
 	//If it's a BabyBlob, it draws the babyBit. 
-	if (typeID == typeid(BabyBlob).hash_code()) {
-		this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getBabyBit(), xPos, yPos);
+	if (maxF == 5) {
+		this->graphicControl->drawBitmap(this->graphicControl->getBabyBit(), xPos, yPos);
 	}
-	else if (typeID == typeid(GrownBlob).hash_code()) {
-		this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getGrownBit(),xPos, yPos);
+
+	//If it's a GrownBlob, it draws the grownBit.
+	else if (maxF == 4) {
+		this->graphicControl->drawBitmap(this->graphicControl->getGrownBit(),xPos, yPos);
 	}
-	else if (typeID == typeid(GoodOldBlob).hash_code()) {
-		this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getBabyBit(),xPos, yPos);
+
+	//If it's a GoodOldBlob, it draws the goodBit.
+	else if (maxF == 3) {
+		this->graphicControl->drawBitmap(this->graphicControl->getGoodBit(),xPos, yPos);
 	}
 }
 
 
-void Simulation::mustMerge(int* mergeVector, int length) {
+void Simulation::Merges() {
 
 	float xPos1, xPos2;
 	float yPos1, yPos2;
-	for (int i = 0; i < length - 1; i++) {
-		xPos1 = this->allBlobs[mergeVector[i]]->getBlobPosition()->x;
-		yPos1 = this->allBlobs[mergeVector[i]]->getBlobPosition()->y;
-		for (int j = 0; j < length; j++) {
 
-			xPos2 = this->allBlobs[mergeVector[j]]->getBlobPosition()->x;
-			yPos2 = this->allBlobs[mergeVector[j]]->getBlobPosition()->y;
 
-			if (xPos1 == xPos2 && yPos1 == yPos2) {
+	float xDist, yDist;
+	int thisMerge;
+	for (int i = 0; i < this->blobAmount-1; i++) {
+		int maxF = this->allBlobs[i]->maxFoodAmount;
+		//First, checks if allBlobs{i] can actually merge (is not a GoodOldBlob).
+		if (maxF != 3) {
 
-				delete this->allBlobs[mergeVector[j]];
-				allBlobs[mergeVector[j]] = nullptr;
-				allBlobs[mergeVector[j]]->willMerge = true;
+			//xPos1 and yPos1 are the coordenates of allBlobs[i]-
+			xPos1 = this->allBlobs[i]->getBlobPosition()->x;
+			yPos1 = this->allBlobs[i]->getBlobPosition()->y;
+
+			//Each iteration has a thisMerge parameter, which serves to do the final speed and direction average.
+			thisMerge = 1;
+
+			//For every blob in the array, the loop iterates through the rest of the array (going forward).
+			for (int j = i+1; j < this->blobAmount; j++) {
+
+				//Coordenates of another (j>i) blob.
+				xPos2 = this->allBlobs[j]->getBlobPosition()->x;
+				yPos2 = this->allBlobs[j]->getBlobPosition()->y;
+
+				xDist = xPos2 - xPos1;
+				yDist = yPos2 - yPos1;
+
+				//If coordenates and type match, they have to merge.
+				if (abs(xDist)<radius && abs(yDist)<radius && maxF == this->allBlobs[j]->maxFoodAmount) {
+
+					//Adds to allBlobs[i] the speed and direction of allBlobs[j].
+					this->allBlobs[i]->willMerge(this->allBlobs[j]);
+
+					//It treats the blobMerge as the death of allBlobs[j] (read specifications above).
+					this->blobDeath(j);
+					j--;
+
+					//Increments the thisMerge parameter associated to allBlobs[i].
+					thisMerge++;
+				}
+			}
+
+			if (thisMerge > 1) {
+				/*Once allBlobs[i] has the added speeds and directions of all the blobs with which it merged,
+				hasMerged divides everything by thisMerge to obtain the mean. */
+				this->allBlobs[i]->hasMerged(thisMerge);
+
+				//Finally, allBlobs[i] evolves (distinguish between cases).
+				if (this->allBlobs[i] && this->allBlobs[i]->maxFoodAmount == 5){
+					GrownBlob tempBlob(this->allBlobs[i]);
+
+					delete allBlobs[i];
+					allBlobs[i] = new (nothrow) GrownBlob(tempBlob);
+				}
+
+				else {
+					GoodOldBlob tempBlob(this->allBlobs[i]);
+
+					delete allBlobs[i];
+					allBlobs[i] = new (nothrow) GoodOldBlob(tempBlob);
+				}
 			}
 		}
 	}
-
-	this->actuallyMerge();
-
 }
 
-void Simulation::actuallyMerge(void) {
-
-	float typeID;
-	for (int i = 0; i < this->blobAmount; i++) {
-
-		typeID = typeid(*this->allBlobs[i]).hash_code();
-
-		if (this->allBlobs[i]->willMerge) {
-			if (typeID == typeid(BabyBlob).hash_code())
-				evolve <GrownBlob>(this->allBlobs[i]);
-
-			else if (typeID == typeid(GrownBlob).hash_code())
-				evolve <GoodOldBlob>(this->allBlobs[i]);
-		}
-	}
-
-}
-
+//Attempts to create a new BabyBlob and appends it to the allBlobs array and increment blobAmount.
 bool Simulation::blobBirth(void) {
 	bool result = true;
 	if (!(this->allBlobs[this->blobAmount] = new (nothrow) BabyBlob(this->width, this->height, this->generalMaxSpeed,
 		this->generalRelativeSpeed, defaultSmellRadius, defaultDeathProb)))
 		result = false;
-	if (result)
+	if (result) {
 		this->blobAmount++;
+		cout << "There are " << this->blobAmount << " blobs (birth)\n";
+	}
 
 	return result;
 }
 
+//Deletes the dead blob and moves all subsecuent blobs to adjust the array.
 void Simulation::blobDeath(int index) {
 	delete this->allBlobs[index];
-	cout << "A blob has died.\n";
 
 	for (int i = index; i < this->blobAmount-1; i++) {
 		this->allBlobs[i] = this->allBlobs[i + 1];
 	}
 
 	this->blobAmount--;
+	cout << "There are " << this->blobAmount << " blobs. (death)\n";
+}
 
+//Draws background, blobs and food.
+void Simulation::drawItAll(void) {
+	
+	//Draws background.
+	this->graphicControl->drawBitmap(this->graphicControl->getBackgrBit(), 0, 0);
+
+	//Draws blobs.
+	for (int i = 0; i < this->blobAmount; i++) {
+		this->drawAccordingBitmap(this->allBlobs[i]);
+	}
+
+	//Draws food.
+	for (int i = 0; i < this->foodAmount; i++) {
+		this->graphicControl->drawBitmap(this->graphicControl->getFoodBit(), foodVector[i]->getXPosit(), 
+			foodVector[i]->getYPosit());
+	}
 }
