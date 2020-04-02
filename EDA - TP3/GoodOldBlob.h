@@ -7,7 +7,7 @@ public:
 
 	GoodOldBlob();
 
-	GoodOldBlob(Blob* otherBlob);
+	GoodOldBlob(Blob* otherBlob, float randomJ);
 	~GoodOldBlob();
 };
 

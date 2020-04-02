@@ -192,7 +192,7 @@ void Simulation::moveCycle(void) {
 	float xPos, yPos;
 
 	int hasBeenEaten;
-	//Temporary places to point flags.
+	//Temporary place to point flag.
 	int a = 0;
 	int* birthFlag = &a;
 
@@ -201,6 +201,7 @@ void Simulation::moveCycle(void) {
 		if (this->allBlobs[i]->checkBlobDeath()) {
 			this->blobDeath(i);
 			i--;
+			cout << "Death\n";
 		}
 	}
 
@@ -236,24 +237,20 @@ void Simulation::drawAccordingBitmap(Blob* thisBlob) {
 	float xPos = thisBlob->getBlobPosition()->x;
 	float yPos = thisBlob->getBlobPosition()->y;
 
-	BabyBlob temp1;
-	GrownBlob temp2;
-	GoodOldBlob temp3;
-
-	int maxF = thisBlob->maxFoodAmount;
+	float typeID = typeid (*thisBlob).hash_code();
 
 	//If it's a BabyBlob, it draws the babyBit. 
-	if (maxF == 5) {
+	if (typeID == typeid (BabyBlob).hash_code()) {
 		this->graphicControl->drawBitmap(this->graphicControl->getBabyBit(), xPos, yPos);
 	}
 
 	//If it's a GrownBlob, it draws the grownBit.
-	else if (maxF == 4) {
+	else if (typeID == typeid (GrownBlob).hash_code()) {
 		this->graphicControl->drawBitmap(this->graphicControl->getGrownBit(),xPos, yPos);
 	}
 
 	//If it's a GoodOldBlob, it draws the goodBit.
-	else if (maxF == 3) {
+	else if (typeID == typeid (GoodOldBlob).hash_code()) {
 		this->graphicControl->drawBitmap(this->graphicControl->getGoodBit(),xPos, yPos);
 	}
 }
@@ -264,64 +261,69 @@ void Simulation::Merges() {
 	float xPos1, xPos2;
 	float yPos1, yPos2;
 
-
+	float typeID;
 	float xDist, yDist;
 	int thisMerge;
-	for (int i = 0; i < this->blobAmount-1; i++) {
-		int maxF = this->allBlobs[i]->maxFoodAmount;
-		//First, checks if allBlobs{i] can actually merge (is not a GoodOldBlob).
-		if (maxF != 3) {
+	if (this->blobAmount) {
+		for (int i = 0; i < this->blobAmount - 1; i++) {
 
-			//xPos1 and yPos1 are the coordenates of allBlobs[i]-
-			xPos1 = this->allBlobs[i]->getBlobPosition()->x;
-			yPos1 = this->allBlobs[i]->getBlobPosition()->y;
+			typeID = typeid (*this->allBlobs[i]).hash_code();
 
-			//Each iteration has a thisMerge parameter, which serves to do the final speed and direction average.
-			thisMerge = 1;
+			//First, checks if allBlobs{i] can actually merge (is not a GoodOldBlob).
+			if (typeID != typeid (GoodOldBlob).hash_code()) {
 
-			//For every blob in the array, the loop iterates through the rest of the array (going forward).
-			for (int j = i+1; j < this->blobAmount; j++) {
+				//xPos1 and yPos1 are the coordenates of allBlobs[i]-
+				xPos1 = this->allBlobs[i]->getBlobPosition()->x;
+				yPos1 = this->allBlobs[i]->getBlobPosition()->y;
 
-				//Coordenates of another (j>i) blob.
-				xPos2 = this->allBlobs[j]->getBlobPosition()->x;
-				yPos2 = this->allBlobs[j]->getBlobPosition()->y;
+				//Each iteration has a thisMerge parameter, which serves to do the final speed and direction average.
+				thisMerge = 1;
 
-				xDist = xPos2 - xPos1;
-				yDist = yPos2 - yPos1;
+				//For every blob in the array, the loop iterates through the rest of the array (going forward).
+				for (int j = i + 1; j < this->blobAmount; j++) {
 
-				//If coordenates and type match, they have to merge.
-				if (abs(xDist)<radius && abs(yDist)<radius && maxF == this->allBlobs[j]->maxFoodAmount) {
+					//Coordenates of another (j>i) blob.
+					xPos2 = this->allBlobs[j]->getBlobPosition()->x;
+					yPos2 = this->allBlobs[j]->getBlobPosition()->y;
 
-					//Adds to allBlobs[i] the speed and direction of allBlobs[j].
-					this->allBlobs[i]->willMerge(this->allBlobs[j]);
+					xDist = xPos2 - xPos1;
+					yDist = yPos2 - yPos1;
 
-					//It treats the blobMerge as the death of allBlobs[j] (read specifications above).
-					this->blobDeath(j);
-					j--;
+					//If coordenates and type match, they have to merge.
+					if (abs(xDist) < this->allBlobs[i]->getBitmapWidth() && abs(yDist) < this->allBlobs[i]->getBitmapWidth()
+						&& typeID == typeid(*this->allBlobs[j]).hash_code()) {
 
-					//Increments the thisMerge parameter associated to allBlobs[i].
-					thisMerge++;
-				}
-			}
+						//Adds to allBlobs[i] the speed and direction of allBlobs[j].
+						this->allBlobs[i]->willMerge(this->allBlobs[j]);
 
-			if (thisMerge > 1) {
-				/*Once allBlobs[i] has the added speeds and directions of all the blobs with which it merged,
-				hasMerged divides everything by thisMerge to obtain the mean. */
-				this->allBlobs[i]->hasMerged(thisMerge);
+						//It treats the blobMerge as the death of allBlobs[j] (read specifications above).
+						this->blobDeath(j);
+						j--;
 
-				//Finally, allBlobs[i] evolves (distinguish between cases).
-				if (this->allBlobs[i] && this->allBlobs[i]->maxFoodAmount == 5){
-					GrownBlob tempBlob(this->allBlobs[i]);
-
-					delete allBlobs[i];
-					allBlobs[i] = new (nothrow) GrownBlob(tempBlob);
+						//Increments the thisMerge parameter associated to allBlobs[i].
+						thisMerge++;
+					}
 				}
 
-				else {
-					GoodOldBlob tempBlob(this->allBlobs[i]);
+				if (thisMerge > 1) {
+					/*Once allBlobs[i] has the added speeds and directions of all the blobs with which it merged,
+					hasMerged divides everything by thisMerge to obtain the mean. */
+					this->allBlobs[i]->hasMerged(thisMerge);
 
-					delete allBlobs[i];
-					allBlobs[i] = new (nothrow) GoodOldBlob(tempBlob);
+					//Finally, allBlobs[i] evolves (distinguish between cases).
+					if (typeID == typeid(BabyBlob).hash_code()) {
+						GrownBlob tempBlob(this->allBlobs[i], randomJiggle);
+
+						delete allBlobs[i];
+						allBlobs[i] = new (nothrow) GrownBlob(tempBlob);
+					}
+
+					else {
+						GoodOldBlob tempBlob(this->allBlobs[i], randomJiggle);
+
+						delete allBlobs[i];
+						allBlobs[i] = new (nothrow) GoodOldBlob(tempBlob);
+					}
 				}
 			}
 		}
@@ -334,10 +336,9 @@ bool Simulation::blobBirth(void) {
 	if (!(this->allBlobs[this->blobAmount] = new (nothrow) BabyBlob(this->width, this->height, this->generalMaxSpeed,
 		this->generalRelativeSpeed, defaultSmellRadius, defaultDeathProb)))
 		result = false;
-	if (result) {
+	
+	if (result)
 		this->blobAmount++;
-		cout << "There are " << this->blobAmount << " blobs (birth)\n";
-	}
 
 	return result;
 }
@@ -351,7 +352,6 @@ void Simulation::blobDeath(int index) {
 	}
 
 	this->blobAmount--;
-	cout << "There are " << this->blobAmount << " blobs. (death)\n";
 }
 
 //Draws background, blobs and food.

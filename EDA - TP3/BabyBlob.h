@@ -8,7 +8,7 @@ public:
 	BabyBlob();
 
 
-	BabyBlob(Blob* otherBlob);
+	BabyBlob(Blob* otherBlob, float randomJ);
 
 	~BabyBlob();
 };

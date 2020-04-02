@@ -32,6 +32,8 @@ public:
 	
 	float getAngle(void);
 
+	int getSmellRadius(void);
+
 	Position* getBlobPosition(void);
 
 	virtual ~Blob();
@@ -40,11 +42,15 @@ public:
 
 	void hasMerged(int thisMerge);
 
-	int maxFoodAmount;
+	int getMinDist(Position* tempPosVector, int size);
+
+	float getBitmapWidth(void);
+
 
 protected:
 	Position position;
-	
+
+	int maxFoodAmount;
 	
 	//Porcentual speed, between 0 and 1.
 	float relativeSpeed;
@@ -56,5 +62,7 @@ protected:
 	int smellRadius;
 	float deathProb;
 	unsigned int foodEaten;
+
+	float bitmapWidth;
 };
 

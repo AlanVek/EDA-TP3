@@ -9,7 +9,7 @@ public:
 
 	GrownBlob();
 
-	GrownBlob(Blob* otherBlob);
+	GrownBlob(Blob* otherBlob, float randomJ);
 
 	~GrownBlob();
 };

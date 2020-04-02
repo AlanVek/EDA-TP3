@@ -3,13 +3,13 @@
 #include "Blob.h"
 #include <random>
 #include <cmath>
+#include <math.h>
+#include <iostream>
 
-
-
+#define BITMAP_WIDTH 30
 #define MAX_ANGLE 2*M_PI
-#define babyBit "babyblob.png"
-//Blob constructor.
 
+//Blob constructors.
 Blob::Blob() {};
 
 Blob::Blob(const Blob* otherBlob) : position(otherBlob->position) {};
@@ -30,7 +30,7 @@ Blob::Blob(unsigned int screenWidth, unsigned int screenHeight, float relativeSp
 	
 	//When "born", all Blobs have eaten 0 food and can merge.
 	this->foodEaten = 0;
-	this->deathProb = -10;
+	this->deathProb = deathProb_;
 
 }
 
@@ -52,11 +52,14 @@ void Blob::blobMove(unsigned int width_, unsigned int height_) {
 	this->blobCorrectMovement(width_, height_);
 }
 
-//Checks for food within smellRadius.
+//Checks for nearest food within smellRadius.
 void Blob::blobSmell(Food** foodVector_, int lenght) {
 	Position temp;
+	
+	//Vector to store all food within smellRadius.
+	Position tempVector[1000];
 	float xDist, yDist;
-
+	int size = 0;
 	//Has to check the whole array.
 	for (int i = 0; i < lenght; i++) {
 
@@ -68,15 +71,28 @@ void Blob::blobSmell(Food** foodVector_, int lenght) {
 		xDist = (temp.x - this->position.x);
 		yDist = (temp.y - this->position.y);
 
-		//If food is within smellRadius, the blob changes its direction to point to the food.
-		if (abs(xDist) < this->smellRadius && abs(yDist) < this->smellRadius)
-			this->angle = atan2(yDist, xDist);
+		//If food is within smellRadius, that potencial new food target is added to the vector.
+		if (abs(xDist) < this->smellRadius && abs(yDist) < this->smellRadius) {
+			tempVector[size] = temp;
+			size++;
+		}
+	}
+
+	if (size) {
+		//Gets food with minimum distance to blob.
+		temp = tempVector[getMinDist(tempVector, size)];
+		xDist = (temp.x - this->position.x);
+		yDist = (temp.y - this->position.y);
+
+		//Changes angle to point to nearest food.
+		this->angle = atan2(yDist, xDist);
 	}
 }
 
 //Gets blob's position.
 Position* Blob::getBlobPosition(void) { return &this->position; }
 
+//Corrects movement in case blob went outside of display. Instead, it appears through the other side.
 void Blob::blobCorrectMovement(unsigned int width_, unsigned int height_) {
 	if (this->position.x >= width_)
 		this->position.x -= width_;
@@ -89,13 +105,12 @@ void Blob::blobCorrectMovement(unsigned int width_, unsigned int height_) {
 		this->position.y += height_;
 }
 
+//Checks if blob is on top of food and modifies foodEaten accordingly.
 int Blob::blobFeeding(Food** foodVector_, int amount, int* birthFlag) {
 	float xPos, yPos, xDist, yDist;
 	int result = -1;
 
 	*birthFlag = 0;
-
-	float totalSpeed = this->maxSpeed * this->relativeSpeed;
 
 	for (int i = 0; i < amount; i++) {
 
@@ -105,17 +120,21 @@ int Blob::blobFeeding(Food** foodVector_, int amount, int* birthFlag) {
 		xDist = this->position.x - xPos;
 		yDist = this->position.y - yPos;
 
-		if (abs(xDist)<totalSpeed/sqrt(2) && abs(yDist)<totalSpeed/sqrt(2)) {
+		if (abs(xDist)<BITMAP_WIDTH && abs(yDist)<BITMAP_WIDTH) {
 			result = i;
 			i = amount;
 			this->foodEaten++;
 		}
 	}
+
+	//Checks if blob "is full" (will trigger a blobBirth).
 	if (this->checkFoodEaten())
 		*birthFlag = 1;
 	return result;
 }
 
+/*Generates a random number between 0 and 1 and, if it's smaller than
+the blob's probability of death, then the blob dies. */
 bool Blob::checkBlobDeath(void) {
 
 	double specificity = 0.001;
@@ -124,29 +143,51 @@ bool Blob::checkBlobDeath(void) {
 
 	double num = specificity * (rand() % dividend);
 
+	
 	return (num < this->deathProb);
 }
 
-
+//Adds the blob's parameters with those of the one that's merging with it.
 void Blob::willMerge(Blob* thisBlob) {
 	this->maxSpeed += thisBlob->maxSpeed;
 	this->relativeSpeed += thisBlob->relativeSpeed;
 	this->angle += thisBlob->angle;
 }
 
+//Sets mean value for each parameter.
 void Blob::hasMerged(int thisMerge) {
 	this->angle /= thisMerge;
 	this->maxSpeed /= thisMerge;
 	this->foodEaten = 0;
 	this->relativeSpeed /= thisMerge;
 }
+
+//Class getters.
 float Blob::getMaxSpeed(void) { return this->maxSpeed; }
 
 float Blob::getRelativeSpeed(void) { return this->relativeSpeed; }
 
 float Blob::getAngle(void) { return this->angle; }
+int Blob::getSmellRadius(void) { return this->smellRadius; }
 
-Blob::~Blob() {
-	int a = 1 + 3;
-};
+float Blob::getBitmapWidth(void) { return this->bitmapWidth; }
+
+
+//Finds the food that is closest to blob.
+int Blob::getMinDist(Position* tempPosVector, int size) {
+	int minPos = 0;
+	float tempDist;
+	float minDist = sqrt(pow(this->position.x - (*tempPosVector).x, 2) + pow(this->position.y - (*tempPosVector).y, 2));
+
+	for (int i = 0; i < size; i++) {
+		tempDist = sqrt(pow(tempPosVector[i].x - this->position.x, 2) + pow(tempPosVector[i].y - this->position.y, 2));
+		if (tempDist < minDist) {
+			minDist = tempDist;
+			minPos = i;
+		}	
+	}
+	return minPos;
+}
+
+Blob::~Blob() {};
 

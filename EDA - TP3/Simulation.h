@@ -16,13 +16,14 @@
 #define defaultWidth 900
 #define defaultHeight 470
 #define defaultFPS 11.0
-#define defaultBlobAmount 10
+#define defaultBlobAmount 15
 #define defaultMaxSpeed 30
 #define defaultRelativeSpeed 0.5
 #define defaultMode 1
-#define defaultFoodAmount 10
-#define defaultSmellRadius 500
-#define defaultDeathProb 0
+#define defaultFoodAmount 15
+#define defaultSmellRadius 50
+#define defaultDeathProb 0.01
+#define randomJiggle 0.5
 /**************************************************/
 class Simulation {
 public:
