@@ -1,10 +1,10 @@
 #pragma once
 
-#include <allegro5/allegro.h>
+#include "Food.h"
 
 typedef struct {
-	unsigned int x;
-	unsigned int y;
+	float x;
+	float y;
 } Position;
 
 class Blob
@@ -22,14 +22,9 @@ public:
 	bool checkIfMerge(void);
 	void blobCorrectMovement(void);
 	void blobMerge(void);
-	Position blobSmell(void);
+	void blobSmell(Food* foodVector_, int lenght);
 
 	Position* getBlobPosition(void);
-
-	bool createBitmap(unsigned int W, unsigned int H,const char* bitName);
-	bool loadBitmap(const char* bitmapName);
-	void drawBitmap(void);
-	void destroyBitmap(void);
 
 protected:
 	Position position;
@@ -46,6 +41,5 @@ protected:
 	unsigned int foodEaten;
 	bool canMerge;
 	int maxFoodAmount;
-	ALLEGRO_BITMAP* blobImage;
 };
 

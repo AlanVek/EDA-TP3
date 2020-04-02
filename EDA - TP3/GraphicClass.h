@@ -1,8 +1,6 @@
 #pragma once
 #include <iostream>
 #include <allegro5/allegro.h>
-//#include <allegro5/allegro_font.h>
-
 
 class GraphicClass {
 public:
@@ -16,18 +14,27 @@ public:
 
 	void destroyGraphics(void);
 
-	bool setBackground(unsigned int width_, unsigned int height_);
-	void drawBackgrBit(void);
-//	void setFontName(const char* fontName_);
-//	bool loadFont(void);;
+	bool initializeBitmaps(unsigned int width_, unsigned int height_);
+
+	bool createBitmap(unsigned int W, unsigned int H, const char* bitName, ALLEGRO_BITMAP*& thisBit);
+
+	void deleteBitmap(ALLEGRO_BITMAP* thisBit);
+	void drawBitmap(ALLEGRO_BITMAP*& thisBit, float X, float Y);
+
+	ALLEGRO_BITMAP*& getBabyBit(void);
+
+	ALLEGRO_BITMAP*& getGrownBit(void);
+
+	ALLEGRO_BITMAP*& getGoodBit(void);
+
+	ALLEGRO_BITMAP*& getBackgrBit(void);
+
+	ALLEGRO_BITMAP*& getFoodBit(void);
 
 private:
 
 	ALLEGRO_DISPLAY* display;
-	ALLEGRO_BITMAP* backgroundBitmap;
-//	ALLEGRO_FONT* font;
-//	ALLEGRO_COLOR fontColor;
 	unsigned int width;
 	unsigned int height;
-//	const char* fontName;
+	ALLEGRO_BITMAP* babyBit, * grownBit, * goodOldBit, * backgroundBit, *foodBit;
 };

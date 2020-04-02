@@ -3,7 +3,7 @@
 //#include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_image.h>
 
-
+#define foodBitmap "food.png"
 
 #define defaultSmellRadius 30
 #define defaultDeathProb 0.3
@@ -119,14 +119,14 @@ bool Simulation::setSimulation(bool displayCreation) {
 		cout << "Failed to create display\n";
 		result = false;
 	}
-	//Attempts to create background.
-	else if (!this->getGraphicControl()->setBackground(this->width, this->height)) {
-		cout << "Failed to load background bitmap\n";
+	//Attempts to create bitmaps.
+	else if (!this->getGraphicControl()->initializeBitmaps(this->width, this->height)) {
+		cout << "Failed to load background bitmaps\n";
 		result = false;
 	}
 	else {
 		//Draws background.
-		this->getGraphicControl()->drawBackgrBit();
+		this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getBackgrBit(),0,0);
 		al_flip_display();
 	}
 	if (result) {
@@ -157,6 +157,9 @@ void Simulation::destroyAll() {
 	this->eventControl->destroyEventQueue();
 	this->timeControl->destroyTimer();
 
+	delete this->graphicControl;
+	delete this->timeControl;
+	delete this->eventControl;
 
 	this->deleteBlobs(this->blobAmount);
 	this->deleteFood(this->foodAmount);
@@ -170,18 +173,16 @@ EventClass* Simulation::getEventControl(void) { return this->eventControl; }
 unsigned int Simulation::getBlobAmount(void) { return this->blobAmount; }
 Blob** Simulation::getAllBlobs(void) { return allBlobs; }
 
-//Creates blobs, loads bitmaps and draws them.
+//Creates food, loads bitmaps and draws them.
 bool Simulation::initializeFood (){
 
 	bool result = true;
 	for (int i = 0; i < this->foodAmount; i++) {
 		if (!(this->foodVector[i] = new (nothrow) Food(this->width, this->height)))
 			result = false;
-
-		else if (!(this->foodVector[i]->createBitmap(width, height)))
-			result = false;
 		else
-			this->foodVector[i]->drawBitmap();
+			this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getFoodBit(),
+				this->foodVector[i]->getXPosit(),this->foodVector[i]->getYPosit());
 	}
 	return result;
 }
@@ -195,10 +196,9 @@ bool Simulation::initializeBlob() {
 			defaultSmellRadius, defaultDeathProb)))
 			result = false;
 
-		else if (!(this->allBlobs[i]->createBitmap(width, height, babyBitmap)))
-			result = false;
 		else
-			this->allBlobs[i]->drawBitmap();
+			this->getGraphicControl()->drawBitmap(this->getGraphicControl()->getBabyBit(), 
+				this->allBlobs[i]->getBlobPosition()->x, this->allBlobs[i]->getBlobPosition()->y);
 	}
 	return result;
 }
@@ -206,21 +206,15 @@ bool Simulation::initializeBlob() {
 //Deletes blob pointers.
 void Simulation::deleteBlobs(int index) {
 	for (int i = 0; i < index; i++) {
-		if (this->allBlobs[i]) {
-			this->allBlobs[i]->destroyBitmap();
-
+		if (this->allBlobs[i]) 
 			delete allBlobs[i];
-		}
 	}
 }
 
 //Deletes food pointers.
 void Simulation::deleteFood(int index) {
 	for (int i = 0; i < index; i++) {
-		if (this->foodVector[i]) {
-			this->foodVector[i]->destroyBitmap();
-
+		if (this->foodVector[i])
 			delete foodVector[i];
-		}
 	}
 }

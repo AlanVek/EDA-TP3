@@ -22,8 +22,6 @@ Blob::Blob(unsigned int screenWidth, unsigned int screenHeight, unsigned int rel
 	this->foodEaten = 0;
 	this->deathProb = deathProb_;
 
-	this->blobImage = NULL;
-
 	//Sets canMerge to default "true" (most likely case scenario).
 	this->canMerge = true;
 }
@@ -37,28 +35,33 @@ bool Blob::checkFoodEaten(void) {
 	return result;
 }
 
-//Frees memory taken up by bitmap.
-void Blob::destroyBitmap(void) {
-	if (this->blobImage)
-		al_destroy_bitmap(blobImage);
+//Updates blob position.
+void Blob::blobMove(void) {
+	this->position.x = this->maxSpeed * this->relativeSpeed * cos(this->angle);
+	this->position.y = this->maxSpeed * this->relativeSpeed * sin(this->angle);
 }
 
+//Checks for food within smellRadius.
+void Blob::blobSmell(Food* foodVector_, int lenght) {
+	Position temp;
+	float xDist, yDist;
 
-bool Blob::createBitmap(unsigned int W, unsigned int H,const char* bitName) {
-	bool result = true;
-	
-	if (!(this->blobImage = al_create_bitmap(W, H)))
-		result = false;
-	else if (!(this->blobImage = al_load_bitmap(bitName)))
-		result = false;
-	else
-		al_draw_bitmap(this->blobImage,position.x,position.y,0);
+	//Has to check the whole array.
+	for (int i = 0; i < lenght; i++) {
 
-	return result;
+		//Gets food position.
+		temp.x = (foodVector_+i)->getXPosit();
+		temp.y = (foodVector_+i)->getYPosit();
+
+		//Defines distances.
+		xDist = (temp.x - position.x);
+		yDist = (temp.y - position.y);
+
+		//If food is within smellRadius, the blob changes its direction to point to the food.
+		if (abs(xDist) < this->smellRadius && abs(yDist) < this->smellRadius)
+			this->angle = atan(yDist / xDist);
+	}
 }
 
-bool Blob::loadBitmap(const char* bitmapName) {
-	return (this->blobImage = al_load_bitmap(bitmapName));
-}
-
-void Blob::drawBitmap(void) { al_draw_bitmap(blobImage,position.x,position.y,0); }
+//Gets blob's position.
+Position* Blob::getBlobPosition(void) { return &this->position; }

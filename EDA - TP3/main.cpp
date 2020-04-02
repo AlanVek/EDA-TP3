@@ -9,6 +9,7 @@ using namespace std;
 int main()
 {
     bool result = true;
+    bool endOfInput = false;
 
     Simulation* mySim = new (nothrow) Simulation;
 
@@ -28,12 +29,15 @@ int main()
             cout << "Failed to initialize simulation\n";
             result = false;
         }
-
-        if (result) {
-            al_flip_display();
-
-            al_rest(3);
+    }
+    mySim->getTimeControl()->startTimer();
+    while (result && !endOfInput) {
+        if (mySim->getEventControl()->getNextEventType() == ALLEGRO_EVENT_TIMER) {
+            //mySim->moveCycle();
         }
+        al_rest(5);
+        endOfInput = true;
+        
     }
 
     mySim->destroyAll();

@@ -46,9 +46,6 @@ public:
 	unsigned int getBlobAmount(void);
 
 	Blob** getAllBlobs(void);
-
-	bool loadFood(void);
-
 	void deleteFood(int index);
 
 	bool initializeFood(void);
