@@ -8,22 +8,22 @@ GrownBlob::GrownBlob(unsigned int screenWidth, unsigned int screenHeight, float 
 
 	Blob(screenWidth, screenHeight, relativeSpeed_, maxSpeed_, smellRadius_, deathProb_){
 
-	this->maxFoodAmount = MAXGROWNFOOD;
-	this->bitmapWidth = GROWNBITWIDTH;
+	maxFoodAmount = MAXGROWNFOOD;
+	bitmapWidth = GROWNBITWIDTH;
 }
 
 GrownBlob::GrownBlob() {};
 
 GrownBlob::GrownBlob(Blob* otherBlob, float randomJ) {
-	this->position = *otherBlob->getBlobPosition();
-	this->maxSpeed = otherBlob->getMaxSpeed();
-	this->relativeSpeed = otherBlob->getRelativeSpeed();
-	this->angle = otherBlob->getAngle() + randomJ;
-	this->maxFoodAmount = MAXGROWNFOOD;
-	this->smellRadius = otherBlob->getSmellRadius();
-	this->foodEaten = 0;
-	this->bitmapWidth = GROWNBITWIDTH;
-	this->deathProb = otherBlob->getDeathProb();
+	position = *otherBlob->getBlobPosition();
+	maxSpeed = otherBlob->getMaxSpeed();
+	relativeSpeed = otherBlob->getRelativeSpeed();
+	angle = otherBlob->getAngle() + randomJ;
+	maxFoodAmount = MAXGROWNFOOD;
+	smellRadius = otherBlob->getSmellRadius();
+	foodEaten = 0;
+	bitmapWidth = GROWNBITWIDTH;
+	deathProb = otherBlob->getDeathProb();
 }
 
 GrownBlob::~GrownBlob() {}

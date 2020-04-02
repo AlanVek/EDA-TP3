@@ -8,22 +8,22 @@ BabyBlob::BabyBlob(unsigned int screenWidth, unsigned int screenHeight,
 	
 	Blob(screenWidth, screenHeight, relativeSpeed_, maxSpeed_, smellRadius_,deathProb_){
 
-	this->maxFoodAmount = MAXBABYFOOD;
-	this->bitmapWidth = BABYBITWIDTH;
+	maxFoodAmount = MAXBABYFOOD;
+	bitmapWidth = BABYBITWIDTH;
 }
 
 BabyBlob::BabyBlob() {};
 
 BabyBlob::BabyBlob(Blob* otherBlob, float randomJ) {
-	this->position = *otherBlob->getBlobPosition();
-	this->maxSpeed = otherBlob->getMaxSpeed();
-	this->relativeSpeed = otherBlob->getRelativeSpeed();
-	this->angle = otherBlob->getAngle() + randomJ;
-	this->maxFoodAmount = MAXBABYFOOD;
-	this->smellRadius = otherBlob->getSmellRadius();
-	this->foodEaten = 0;
-	this->bitmapWidth = BABYBITWIDTH;
-	this->deathProb = otherBlob->getDeathProb();
+	position = *otherBlob->getBlobPosition();
+	maxSpeed = otherBlob->getMaxSpeed();
+	relativeSpeed = otherBlob->getRelativeSpeed();
+	angle = otherBlob->getAngle() + randomJ;
+	maxFoodAmount = MAXBABYFOOD;
+	smellRadius = otherBlob->getSmellRadius();
+	foodEaten = 0;
+	bitmapWidth = BABYBITWIDTH;
+	deathProb = otherBlob->getDeathProb();
 }
 
 BabyBlob::~BabyBlob() {};

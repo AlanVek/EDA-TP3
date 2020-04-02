@@ -13,28 +13,28 @@ using namespace std;
 
 //Simulation constructor.
 Simulation::Simulation(unsigned int width_, unsigned int height_, double FPS_, unsigned int blobAmount_, 
-	unsigned int generalMaxSpeed_, float generalRelativeSpeed_, int mode_, int foodAmount_) : 
+	unsigned int generalMaxSpeed_, float generalRelativeSpeed_, int mode_, int foodCount_) : 
 
 	width(width_), height(height_), FPS(FPS_), blobAmount(blobAmount_), generalMaxSpeed(generalMaxSpeed_),
-	generalRelativeSpeed(generalRelativeSpeed_), mode(mode_), foodAmount(foodAmount_){
+	generalRelativeSpeed(generalRelativeSpeed_), mode(mode_), foodCount(foodCount_){
 
-	this->graphicControl = nullptr;
-	this->timeControl = nullptr;
-	this->eventControl = nullptr;
+	graphicControl = nullptr;
+	timeControl = nullptr;
+	eventControl = nullptr;
 }
 
 bool Simulation::initializeAll(void) {
 	bool result = true;
 
 	/*Allegro initialization error check*/
-	if (!this->setAllegro()) {
+	if (!setAllegro()) {
 		cout << "Failed to initialize Allegro.\n";
 		result = false;
 	}
 
 	/*Initialization of graphic resources. Checks for errors.
 	True parameter indicates to create a new display. */
-	else if (!this->setSimulation(true)) {
+	else if (!setSimulation(true)) {
 		cout << "Failed to set simulation.\n";
 		result = false;
 	}
@@ -69,40 +69,40 @@ bool Simulation::setSimulation(bool displayCreation) {
 
 	bool result = true;
 
-	this->graphicControl = new (nothrow) GraphicClass(this->width, this->height);
-	this->eventControl = new (nothrow) EventClass();
-	this->timeControl = new (nothrow) TimeClass();
-	if (!this->graphicControl) {
+	graphicControl = new (nothrow) GraphicClass(width, height);
+	eventControl = new (nothrow) EventClass();
+	timeControl = new (nothrow) TimeClass();
+	if (!graphicControl) {
 		cout << "Failed to create graphic pointer\n";
 		result = false;
 	}
-	else if (!this->eventControl) {
+	else if (!eventControl) {
 		cout << "Failed to create event pointer\n";
 		result = false;
 	}
-	else if (!this->timeControl) {
+	else if (!timeControl) {
 		cout << "Failed to create time pointer\n";
 		result = false;
 	}
 	//Attempts to create event queue.
-	else if (!this->eventControl->createEventQueue()) {
+	else if (!eventControl->createEventQueue()) {
 		cout << "Failed to create event queue\n";
 		result = false;
 	}
 
 	//Attempts to create timer.
-	else if (!this->timeControl->createTimer(this->FPS)) {
+	else if (!timeControl->createTimer(FPS)) {
 		cout << "Failed to create timer\n";
 		result = false;
 	}
 
 	//Attempts to create display (if requested).
-	else if (displayCreation && !this->graphicControl->createDisplay()) {
+	else if (displayCreation && !graphicControl->createDisplay()) {
 		cout << "Failed to create display\n";
 		result = false;
 	}
 	//Attempts to create bitmaps.
-	else if (!this->graphicControl->initializeBitmaps(this->width, this->height)) {
+	else if (!graphicControl->initializeBitmaps(width, height)) {
 		cout << "Failed to load background bitmaps\n";
 		result = false;
 	}
@@ -113,7 +113,7 @@ bool Simulation::setSimulation(bool displayCreation) {
 			cout << "Failed to create blobs\n";
 			result = false;
 		}
-		//Attempts to Initialize foodVector to default values (for now) and create bitmaps.
+		//Attempts to Initialize allFoods to default values (for now) and create bitmaps.
 		else if (!initializeFood()) {
 			cout << "Failed to create food\n";
 			result = false;
@@ -123,45 +123,29 @@ bool Simulation::setSimulation(bool displayCreation) {
 
 	//Sets event source for timer and shows drawings.
 	if (result) {
-		al_register_event_source(this->eventControl->getQueue(), al_get_timer_event_source(this->timeControl->getTimer()));
-		al_register_event_source(this->eventControl->getQueue(), al_get_keyboard_event_source());
+		al_register_event_source(eventControl->getQueue(), al_get_timer_event_source(timeControl->getTimer()));
+		al_register_event_source(eventControl->getQueue(), al_get_keyboard_event_source());
 	}
 	return result;
 }
 
-//Frees memory.
-void Simulation::destroyAll() {
-	this->graphicControl->destroyGraphics();
-	this->eventControl->destroyEventQueue();
-	this->timeControl->destroyTimer();
-
-	delete this->graphicControl;
-	delete this->timeControl;
-	delete this->eventControl;
-
-	deleteArray < Blob* > (this->allBlobs, this->blobAmount);
-
-	deleteArray < Food* > (this->foodVector, this->foodAmount);
-}
-
-
 //Class getters.
-GraphicClass* Simulation::getGraphicControl(void) { return this->graphicControl; }
-TimeClass* Simulation::getTimeControl(void) { return this->timeControl; }
-EventClass* Simulation::getEventControl(void) { return this->eventControl; }
-unsigned int Simulation::getBlobAmount(void) { return this->blobAmount; }
+GraphicClass* Simulation::getGraphicControl(void) { return graphicControl; }
+TimeClass* Simulation::getTimeControl(void) { return timeControl; }
+EventClass* Simulation::getEventControl(void) { return eventControl; }
+unsigned int Simulation::getBlobAmount(void) { return blobAmount; }
 Blob** Simulation::getAllBlobs(void) { return allBlobs; }
 
 //Creates food, loads bitmaps and draws them.
 bool Simulation::initializeFood (){
 
 	bool result = true;
-	for (int i = 0; i < this->foodAmount; i++) {
-		if (!(this->foodVector[i] = new (nothrow) Food(this->width, this->height)))
+	for (int i = 0; i < foodCount; i++) {
+		if (!(allFoods[i] = new (nothrow) Food(width, height)))
 			result = false;
 		else
-			this->graphicControl->drawBitmap(this->graphicControl->getFoodBit(),
-				this->foodVector[i]->getXPosit(),this->foodVector[i]->getYPosit());
+			graphicControl->drawBitmap(graphicControl->getFoodBit(),
+				allFoods[i]->getXPosit(),allFoods[i]->getYPosit());
 	}
 	return result;
 }
@@ -170,16 +154,29 @@ bool Simulation::initializeFood (){
 bool Simulation::initializeBlob() {
 	float xPos, yPos;
 	bool result = true;
-	for (int i = 0; i < this->blobAmount; i++) {
+
+	float gMaxSpeed;
+	float gRelSpeed;
+
+
+	for (int i = 0; i < blobAmount; i++) {
 		
-		if (!(this->allBlobs[i] = new (nothrow) BabyBlob(this->width, this->height, this->generalMaxSpeed,
-			this->generalRelativeSpeed, defaultSmellRadius, defaultDeathProb)))
+		if (mode == 1) {
+			gMaxSpeed = defaultMaxSpeed;
+			gRelSpeed = 0.001 * (rand() % 1000);
+		}
+		else {
+			gMaxSpeed = rand() % defaultMaxSpeed;
+			gRelSpeed = defaultRelativeSpeed;
+		}
+		if (!(allBlobs[i] = new (nothrow) BabyBlob(width, height, gMaxSpeed,
+			gRelSpeed, defaultSmellRadius, defaultDeathProb)))
 			result = false;
 
 		else {
-			xPos = this->allBlobs[i]->getBlobPosition()->x;
-			yPos = this->allBlobs[i]->getBlobPosition()->y;
-			this->drawAccordingBitmap(this->allBlobs[i]);
+			xPos = allBlobs[i]->getBlobPosition()->x;
+			yPos = allBlobs[i]->getBlobPosition()->y;
+			drawAccordingBitmap(allBlobs[i]);
 		}
 	}
 	return result;
@@ -196,37 +193,37 @@ void Simulation::moveCycle(void) {
 	int* birthFlag = &a;
 
 	//First, it checks for blobDeaths and adjusts blobAmount accordingly.
-	for (int i = 0; i < this->blobAmount; i++) {
-		if (this->allBlobs[i]->checkBlobDeath()) {
-			this->blobDeath(i);
+	for (int i = 0; i < blobAmount; i++) {
+		if (allBlobs[i]->checkBlobDeath()) {
+			blobDeath(i);
 			i--;
 		}
 	}
 
 	//Then, every blob smells for food (and adjusts angles).
-	for (int i = 0; i < this->blobAmount; i++) 
-		this->allBlobs[i]->blobSmell(this->foodVector, this->foodAmount);
+	for (int i = 0; i < blobAmount; i++) 
+		allBlobs[i]->blobSmell(allFoods, foodCount);
 
 	//Separately, so as to first finish calculations, the blobs move.
-	for (int i = 0; i < this->blobAmount; i++) {
-		this->allBlobs[i]->blobMove(this->width, this->height);
+	for (int i = 0; i < blobAmount; i++) {
+		allBlobs[i]->blobMove(width, height);
 
 		//Checks for eaten food.
-		hasBeenEaten = this->allBlobs[i]->blobFeeding(this->foodVector, this->foodAmount,birthFlag);
+		hasBeenEaten = allBlobs[i]->blobFeeding(allFoods, foodCount,birthFlag);
 		if ( hasBeenEaten != -1)
-			this->foodVector[hasBeenEaten]->NewPosition(this->width, this->height);
+			allFoods[hasBeenEaten]->NewPosition(width, height);
 
 		//Checks for potential blobBirth.
 		if (*birthFlag) {
-			if (!this->blobBirth())
+			if (!blobBirth())
 				cout << "Runtime Error. Failed to create new BabyBlob.\n";
 		}
 	}
 
 	//Checks for merges and does the necessary changes.
-	this->Merges();
+	Merges();
 
-	this->drawItAll();
+	drawItAll();
 
 	al_flip_display();
 }
@@ -239,17 +236,17 @@ void Simulation::drawAccordingBitmap(Blob* thisBlob) {
 
 	//If it's a BabyBlob, it draws the babyBit. 
 	if (typeID == typeid (BabyBlob).hash_code()) {
-		this->graphicControl->drawBitmap(this->graphicControl->getBabyBit(), xPos, yPos);
+		graphicControl->drawBitmap(graphicControl->getBabyBit(), xPos, yPos);
 	}
 
 	//If it's a GrownBlob, it draws the grownBit.
 	else if (typeID == typeid (GrownBlob).hash_code()) {
-		this->graphicControl->drawBitmap(this->graphicControl->getGrownBit(),xPos, yPos);
+		graphicControl->drawBitmap(graphicControl->getGrownBit(),xPos, yPos);
 	}
 
 	//If it's a GoodOldBlob, it draws the goodBit.
 	else if (typeID == typeid (GoodOldBlob).hash_code()) {
-		this->graphicControl->drawBitmap(this->graphicControl->getGoodBit(),xPos, yPos);
+		graphicControl->drawBitmap(graphicControl->getGoodBit(),xPos, yPos);
 	}
 }
 
@@ -260,43 +257,43 @@ void Simulation::Merges() {
 	float xPos1, xPos2;
 	float yPos1, yPos2;
 
-	float typeID;
+	float typeID, randomJ;
 	float xDist, yDist;
 	int thisMerge;
-	if (this->blobAmount) {
-		for (int i = 0; i < this->blobAmount - 1; i++) {
+	if (blobAmount) {
+		for (int i = 0; i < blobAmount - 1; i++) {
 
-			typeID = typeid (*this->allBlobs[i]).hash_code();
+			typeID = typeid (*allBlobs[i]).hash_code();
 
 			//First, checks if allBlobs{i] can actually merge (is not a GoodOldBlob).
 			if (typeID != typeid (GoodOldBlob).hash_code()) {
 
 				//xPos1 and yPos1 are the coordenates of allBlobs[i]-
-				xPos1 = this->allBlobs[i]->getBlobPosition()->x;
-				yPos1 = this->allBlobs[i]->getBlobPosition()->y;
+				xPos1 = allBlobs[i]->getBlobPosition()->x;
+				yPos1 = allBlobs[i]->getBlobPosition()->y;
 
 				//Each iteration has a thisMerge parameter, which serves to do the final speed and direction average.
 				thisMerge = 1;
 
 				//For every blob in the array, the loop iterates through the rest of the array (going forward).
-				for (int j = i + 1; j < this->blobAmount; j++) {
+				for (int j = i + 1; j < blobAmount; j++) {
 
 					//Coordenates of another (j>i) blob.
-					xPos2 = this->allBlobs[j]->getBlobPosition()->x;
-					yPos2 = this->allBlobs[j]->getBlobPosition()->y;
+					xPos2 = allBlobs[j]->getBlobPosition()->x;
+					yPos2 = allBlobs[j]->getBlobPosition()->y;
 
 					xDist = xPos2 - xPos1;
 					yDist = yPos2 - yPos1;
 
 					//If coordenates and type match, they have to merge.
-					if (abs(xDist) < this->allBlobs[i]->getBitmapWidth() && abs(yDist) < this->allBlobs[i]->getBitmapWidth()
-						&& typeID == typeid(*this->allBlobs[j]).hash_code()) {
+					if (abs(xDist) < allBlobs[i]->getBitmapWidth() && abs(yDist) < allBlobs[i]->getBitmapWidth()
+						&& typeID == typeid(*allBlobs[j]).hash_code()) {
 
 						//Adds to allBlobs[i] the speed and direction of allBlobs[j].
-						this->allBlobs[i]->willMerge(this->allBlobs[j]);
+						allBlobs[i]->willMerge(allBlobs[j]);
 
 						//It treats the blobMerge as the death of allBlobs[j] (read specifications above).
-						this->blobDeath(j);
+						blobDeath(j);
 						j--;
 
 						//Increments the thisMerge parameter associated to allBlobs[i].
@@ -307,18 +304,20 @@ void Simulation::Merges() {
 				if (thisMerge > 1) {
 					/*Once allBlobs[i] has the added speeds and directions of all the blobs with which it merged,
 					hasMerged divides everything by thisMerge to obtain the mean. */
-					this->allBlobs[i]->hasMerged(thisMerge);
+					allBlobs[i]->hasMerged(thisMerge);
+
+					randomJ = (float) (rand() % (randomJiggleLimit*100))/100.0;
 
 					//Finally, allBlobs[i] evolves (distinguish between cases).
 					if (typeID == typeid(BabyBlob).hash_code()) {
-						GrownBlob tempBlob(this->allBlobs[i], randomJiggle);
+						GrownBlob tempBlob(allBlobs[i], randomJ);
 
 						delete allBlobs[i];
 						allBlobs[i] = new (nothrow) GrownBlob(tempBlob);
 					}
 
 					else {
-						GoodOldBlob tempBlob(this->allBlobs[i], randomJiggle);
+						GoodOldBlob tempBlob(allBlobs[i], randomJ);
 
 						delete allBlobs[i];
 						allBlobs[i] = new (nothrow) GoodOldBlob(tempBlob);
@@ -332,41 +331,53 @@ void Simulation::Merges() {
 //Attempts to create a new BabyBlob and appends it to the allBlobs array and increment blobAmount.
 bool Simulation::blobBirth(void) {
 	bool result = true;
-	if (!(this->allBlobs[this->blobAmount] = new (nothrow) BabyBlob(this->width, this->height, this->generalMaxSpeed,
-		this->generalRelativeSpeed, defaultSmellRadius, defaultDeathProb)))
+	if (!(allBlobs[blobAmount] = new (nothrow) BabyBlob(width, height, generalMaxSpeed,
+		generalRelativeSpeed, defaultSmellRadius, defaultDeathProb)))
 		result = false;
 	
 	if (result)
-		this->blobAmount++;
+		blobAmount++;
 
 	return result;
 }
 
 //Deletes the dead blob and moves all subsecuent blobs to adjust the array.
 void Simulation::blobDeath(int index) {
-	delete this->allBlobs[index];
+	delete allBlobs[index];
 
-	for (int i = index; i < this->blobAmount-1; i++) {
-		this->allBlobs[i] = this->allBlobs[i + 1];
+	for (int i = index; i < blobAmount-1; i++) {
+		allBlobs[i] = allBlobs[i + 1];
 	}
 
-	this->blobAmount--;
+	blobAmount--;
 }
 
 //Draws background, blobs and food.
 void Simulation::drawItAll(void) {
 	
 	//Draws background.
-	this->graphicControl->drawBitmap(this->graphicControl->getBackgrBit(), 0, 0);
+	graphicControl->drawBitmap(graphicControl->getBackgrBit(), 0, 0);
 
 	//Draws blobs.
-	for (int i = 0; i < this->blobAmount; i++) {
-		this->drawAccordingBitmap(this->allBlobs[i]);
+	for (int i = 0; i < blobAmount; i++) {
+		drawAccordingBitmap(allBlobs[i]);
 	}
 
 	//Draws food.
-	for (int i = 0; i < this->foodAmount; i++) {
-		this->graphicControl->drawBitmap(this->graphicControl->getFoodBit(), foodVector[i]->getXPosit(), 
-			foodVector[i]->getYPosit());
+	for (int i = 0; i < foodCount; i++) {
+		graphicControl->drawBitmap(graphicControl->getFoodBit(), allFoods[i]->getXPosit(), 
+			allFoods[i]->getYPosit());
 	}
+}
+
+//Destructor. Frees memory.
+Simulation::~Simulation() {
+	
+	delete graphicControl;
+	delete timeControl;
+	delete eventControl;
+
+	deleteArray < Blob* >(allBlobs, blobAmount);
+
+	deleteArray < Food* >(allFoods, foodCount);
 }

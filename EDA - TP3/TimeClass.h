@@ -9,7 +9,7 @@ public:
 	bool createTimer(double FPS_);
 	ALLEGRO_TIMER* getTimer(void);
 
-	void destroyTimer(void);
+	~TimeClass();
 
 private:
 	ALLEGRO_TIMER* Timer;

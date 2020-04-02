@@ -43,7 +43,6 @@ int main()
         }
     }
 
-    mySim->destroyAll();
     delete mySim;
     return 0;
 }

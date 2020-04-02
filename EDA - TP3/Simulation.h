@@ -7,7 +7,7 @@
 
 
 
-#define MAXBLOBAMOUNT 500
+#define MAXBLOBAMOUNT 5000
 #define FOODAMOUNT 100
 //Temporary values to check correct initialization.
 /**************************************************/
@@ -16,14 +16,14 @@
 #define defaultWidth 900
 #define defaultHeight 470
 #define defaultFPS 11.0
-#define defaultBlobAmount 15
+#define defaultBlobAmount 10
 #define defaultMaxSpeed 30
 #define defaultRelativeSpeed 0.5
 #define defaultMode 1
 #define defaultFoodAmount 10
 #define defaultSmellRadius 150
-#define defaultDeathProb 0.005
-#define randomJiggle 0.1
+#define defaultDeathProb 0.01
+#define randomJiggleLimit 1
 /**************************************************/
 class Simulation {
 public:
@@ -34,8 +34,6 @@ public:
 		float generalRelativeSpeed_ = defaultRelativeSpeed,int mode_ = defaultMode, int foodAmount_ = defaultFoodAmount);
 
 	bool setSimulation(bool displayCreation = defaultDisplay);
-
-	void destroyAll();
 
 	bool setAllegro(void);
 
@@ -62,17 +60,20 @@ public:
 	void drawItAll(void);
 
 	void Merges(void);
+
+	~Simulation();
 private:
 
 	//Datos miembro de Simulation.
-	unsigned int blobAmount, foodAmount;
-	unsigned int width, height;
-	int mode;
-
 	GraphicClass* graphicControl;
 	TimeClass* timeControl;
 	EventClass* eventControl;
 	Blob* allBlobs[MAXBLOBAMOUNT];
+	Food* allFoods[FOODAMOUNT];
+
+	unsigned int blobAmount, foodCount;
+	unsigned int width, height;
+	int mode;
 
 	//For mode 1.
 	unsigned int generalMaxSpeed;
@@ -81,6 +82,4 @@ private:
 	float generalRelativeSpeed;
 
 	double FPS;
-
-	Food* foodVector[FOODAMOUNT];
 };

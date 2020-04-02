@@ -7,23 +7,23 @@ GoodOldBlob::GoodOldBlob(unsigned int screenWidth, unsigned int screenHeight, fl
 	unsigned int maxSpeed_, unsigned int smellRadius_, float deathProb_) :
 
 	Blob(screenWidth, screenHeight, relativeSpeed_, maxSpeed_, smellRadius_, deathProb_) {
-	this->maxFoodAmount = MAXOLDFOOD;
-	this->bitmapWidth = GOODOLDBITWIDTH;
+	maxFoodAmount = MAXOLDFOOD;
+	bitmapWidth = GOODOLDBITWIDTH;
 }
 
 GoodOldBlob::GoodOldBlob() {};
 
 
 GoodOldBlob::GoodOldBlob(Blob* otherBlob, float randomJ) {
-	this->position = *otherBlob->getBlobPosition();
-	this->maxSpeed = otherBlob->getMaxSpeed();
-	this->relativeSpeed = otherBlob->getRelativeSpeed();
-	this->angle = otherBlob->getAngle() + randomJ;
-	this->maxFoodAmount = MAXOLDFOOD;
-	this->smellRadius = otherBlob->getSmellRadius();
-	this->foodEaten = 0;
-	this->bitmapWidth = GOODOLDBITWIDTH;
-	this->deathProb = otherBlob->getDeathProb();
+	position = *otherBlob->getBlobPosition();
+	maxSpeed = otherBlob->getMaxSpeed();
+	relativeSpeed = otherBlob->getRelativeSpeed();
+	angle = otherBlob->getAngle() + randomJ;
+	maxFoodAmount = MAXOLDFOOD;
+	smellRadius = otherBlob->getSmellRadius();
+	foodEaten = 0;
+	bitmapWidth = GOODOLDBITWIDTH;
+	deathProb = otherBlob->getDeathProb();
 }
 
 GoodOldBlob::~GoodOldBlob() {}

@@ -12,13 +12,12 @@ public:
 
 	ALLEGRO_DISPLAY* getDisplay(void);
 
-	void destroyGraphics(void);
+	~GraphicClass();
 
 	bool initializeBitmaps(unsigned int width_, unsigned int height_);
 
 	bool createBitmap(unsigned int W, unsigned int H, const char* bitName, ALLEGRO_BITMAP*& thisBit);
 
-	void deleteBitmap(ALLEGRO_BITMAP* thisBit);
 	void drawBitmap(ALLEGRO_BITMAP*& thisBit, float X, float Y);
 
 	ALLEGRO_BITMAP*& getBabyBit(void);

@@ -16,50 +16,48 @@ GraphicClass::GraphicClass(unsigned int width_, unsigned int height_) :
 	
     height(height_), width(width_){
 
-    this->display = nullptr;
-    this->backgroundBit = nullptr;
+    display = nullptr;
+    backgroundBit = nullptr;
 
-    this->babyBit = nullptr;
-    this->grownBit = nullptr;
+    babyBit = nullptr;
+    grownBit = nullptr;
 
-    this->goodOldBit= nullptr;
-    this->foodBit = nullptr;
-    //this->font = nullptr;
+    goodOldBit= nullptr;
+    foodBit = nullptr;
+    //font = nullptr;
 }
 
 //Attempts to create display. Returns true if successful. 
 bool GraphicClass::createDisplay(void) {
-    return (this->display = al_create_display(width, height));
+    return (display = al_create_display(width, height));
 }
 
 //Sets font name.
-//void GraphicClass::setFontName(const char* fontName_) { this->fontName = fontName_; }
+//void GraphicClass::setFontName(const char* fontName_) { fontName = fontName_; }
 
 //Gets display.
-ALLEGRO_DISPLAY* GraphicClass::getDisplay(void) { return this->display; }
+ALLEGRO_DISPLAY* GraphicClass::getDisplay(void) { return display; }
 
 //Frees memory.
-void GraphicClass::destroyGraphics(void) {
-    /*if (this->font)
-        al_destroy_font(this->font);*/
-    if (this->display)
-        al_destroy_display(this->display);
-    if (this->backgroundBit)
-        al_destroy_bitmap(this->backgroundBit);
+GraphicClass::~GraphicClass(void) {
+    if (display)
+        al_destroy_display(display);
+    if (backgroundBit)
+        al_destroy_bitmap(backgroundBit);
 
-    if (this->babyBit)
-        al_destroy_bitmap(this->babyBit);
-    if (this->grownBit)
-        al_destroy_bitmap(this->grownBit);
-    if (this->goodOldBit)
-        al_destroy_bitmap(this->goodOldBit);
-    if (this->foodBit)
-        al_destroy_bitmap(this->foodBit);
+    if (babyBit)
+        al_destroy_bitmap(babyBit);
+    if (grownBit)
+        al_destroy_bitmap(grownBit);
+    if (goodOldBit)
+        al_destroy_bitmap(goodOldBit);
+    if (foodBit)
+        al_destroy_bitmap(foodBit);
 }
 
 /*//Attempts to load font. Returns false if unsuccessful.
 bool GraphicClass::loadFont(void) {  
-    return (this->font = al_load_ttf_font(this->fontName, FONTSIZE, 0));
+    return (font = al_load_ttf_font(fontName, FONTSIZE, 0));
 }*/
 
 //Creates a bitmap, stores it in thisBit and loads it with bitName.
@@ -73,37 +71,31 @@ bool GraphicClass::createBitmap(unsigned int W, unsigned int H, const char* bitN
     return result;
 }
 
-//Frees memory taken up by bitmap.
-void GraphicClass::deleteBitmap(ALLEGRO_BITMAP* thisBit) {
-    if (thisBit)
-        al_destroy_bitmap(thisBit);
-}
-
 //Draw a bitmap at position (x,y).
 void GraphicClass::drawBitmap(ALLEGRO_BITMAP*& thisBit, float X, float Y) { al_draw_bitmap(thisBit,X,Y, 0); }
 
 
 //Bitmap getters.
-ALLEGRO_BITMAP*& GraphicClass::getBabyBit(void) { return this->babyBit; }
-ALLEGRO_BITMAP*& GraphicClass::getGrownBit(void) { return this->grownBit; }
-ALLEGRO_BITMAP*& GraphicClass::getGoodBit(void) { return this->goodOldBit; }
-ALLEGRO_BITMAP*& GraphicClass::getBackgrBit(void) { return this->backgroundBit; }
-ALLEGRO_BITMAP*& GraphicClass::getFoodBit(void) { return this->foodBit; }
+ALLEGRO_BITMAP*& GraphicClass::getBabyBit(void) { return babyBit; }
+ALLEGRO_BITMAP*& GraphicClass::getGrownBit(void) { return grownBit; }
+ALLEGRO_BITMAP*& GraphicClass::getGoodBit(void) { return goodOldBit; }
+ALLEGRO_BITMAP*& GraphicClass::getBackgrBit(void) { return backgroundBit; }
+ALLEGRO_BITMAP*& GraphicClass::getFoodBit(void) { return foodBit; }
 
 
 //Creates and loads all bitmaps.
 bool GraphicClass::initializeBitmaps(unsigned int width_, unsigned int height_) {
     bool result = true;
     
-    if (!this->createBitmap(width_, height_, babyBitmap, this->babyBit))
+    if (!createBitmap(width_, height_, babyBitmap, babyBit))
         result = false;
-    else if (!this->createBitmap(width_, height_, grownBitmap, this->grownBit))
+    else if (!createBitmap(width_, height_, grownBitmap, grownBit))
         result = false;
-    else if (!(this->createBitmap(width_, height_, goodOldBitmap, this->goodOldBit)))
+    else if (!(createBitmap(width_, height_, goodOldBitmap, goodOldBit)))
         result = false;
-    else if (!(this->createBitmap(width_, height_, foodBitmap, this->foodBit)))
+    else if (!(createBitmap(width_, height_, foodBitmap, foodBit)))
         result = false;
-    else if (!(this->createBitmap(width_, height_, backgrBitmap,  this->backgroundBit)))
+    else if (!(createBitmap(width_, height_, backgrBitmap,  backgroundBit)))
         result = false;
 
     return result;

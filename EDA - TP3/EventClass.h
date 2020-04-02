@@ -8,7 +8,7 @@ public:
 	
 	int getNextEventType();
 	ALLEGRO_EVENT_QUEUE* getQueue(void);
-	void destroyEventQueue(void);
+	~EventClass();
 	ALLEGRO_EVENT getEvent();
 
 private:
