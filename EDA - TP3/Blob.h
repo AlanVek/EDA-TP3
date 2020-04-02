@@ -26,8 +26,9 @@ public:
 
 	Position* getBlobPosition(void);
 
+	bool createBitmap(unsigned int W, unsigned int H,const char* bitName);
 	bool loadBitmap(const char* bitmapName);
-
+	void drawBitmap(void);
 	void destroyBitmap(void);
 
 protected:

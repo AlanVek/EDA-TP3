@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BabyBlob.cpp" />
+    <ClCompile Include="Food.cpp" />
     <ClCompile Include="Simulation.cpp" />
     <ClCompile Include="Blob.cpp" />
     <ClCompile Include="EventClass.cpp" />
@@ -169,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BabyBlob.h" />
+    <ClInclude Include="Food.h" />
     <ClInclude Include="Simulation.h" />
     <ClInclude Include="Blob.h" />
     <ClInclude Include="EventClass.h" />

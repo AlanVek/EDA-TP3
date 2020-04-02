@@ -1,18 +1,21 @@
 #include "Simulation.h"
-#include <allegro5\allegro_primitives.h>
-#include <allegro5/allegro_ttf.h>
+//#include <allegro5\allegro_primitives.h>
+//#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_image.h>
+
 
 
 #define defaultSmellRadius 30
 #define defaultDeathProb 0.3
+#define babyBitmap "babyblob.png"
 using namespace std;
 
 //Simulation constructor.
 Simulation::Simulation(unsigned int width_, unsigned int height_, double FPS_, unsigned int blobAmount_, 
-	unsigned int generalMaxSpeed_, unsigned int generalRelativeSpeed_, int mode_) : 
+	unsigned int generalMaxSpeed_, unsigned int generalRelativeSpeed_, int mode_, int foodAmount_) : 
 
 	width(width_), height(height_), FPS(FPS_), blobAmount(blobAmount_), generalMaxSpeed(generalMaxSpeed_),
-	generalRelativeSpeed(generalRelativeSpeed_), mode(mode_){
+	generalRelativeSpeed(generalRelativeSpeed_), mode(mode_), foodAmount(foodAmount_){
 
 	this->graphicControl = nullptr;
 	this->timeControl = nullptr;
@@ -23,18 +26,22 @@ bool Simulation::initializeAll(void) {
 	bool result = true;
 
 	/*Allegro initialization error check*/
-	if (!setAllegro()) {
+	if (!this->setAllegro()) {
 		cout << "Failed to initialize Allegro.\n";
 		result = false;
 	}
 
 	/*Initialization of graphic resources. Checks for errors.
 	True parameter indicates to create a new display. */
-	if (!setSimulation(true)) {
+	else if (!this->setSimulation(true)) {
 		cout << "Failed to set simulation.\n";
 		result = false;
 	}
-
+	/*else if (!this->loadFood()) {
+		cout << "Failed to load food.\n";
+		result = false;
+	}*/
+	
 	return result;
 }
 
@@ -46,7 +53,13 @@ bool Simulation::setAllegro(void) {
 		cout << "Failed to Initialize Allegro\n";
 		result = false;
 	}
-	else if (!al_init_primitives_addon()) {
+
+	//Attempts to initialize image addon.
+	else if (!al_init_image_addon()) {
+		cout << "Failed to initialize image addon\n";
+		result = false;
+	}
+	/*else if (!al_init_primitives_addon()) {
 		cout << "Failed to initialize primitives addon\n";
 		result = false;
 	}
@@ -57,88 +70,157 @@ bool Simulation::setAllegro(void) {
 	else if (!al_init_ttf_addon()) {
 		cout << "Failed to initialize ttf font addon\n";
 		result = false;
-	}
+	}*/
 
-	return true;
+	return result;
 }
 
 /*Creates needed resources and checks for initialization errors.
 If there's been one, returns false. If not, returns true. 
 If displayCreation is true, it creates a new display.*/
 bool Simulation::setSimulation(bool displayCreation) {
-	
+
 	bool result = true;
 
 	this->graphicControl = new (nothrow) GraphicClass(this->width, this->height);
 	this->eventControl = new (nothrow) EventClass();
 	this->timeControl = new (nothrow) TimeClass();
-	if (!graphicControl) {
+	if (!this->graphicControl) {
 		cout << "Failed to create graphic pointer\n";
 		result = false;
 	}
+	else if (!this->eventControl) {
+		cout << "Failed to create event pointer\n";
+		result = false;
+	}
+	else if (!this->timeControl) {
+		cout << "Failed to create time pointer\n";
+		result = false;
+	}
 	//Attempts to create event queue.
-	if (!eventControl->createEventQueue()) {
+	else if (!this->eventControl->createEventQueue()) {
 		cout << "Failed to create event queue\n";
 		result = false;
 	}
 
 	//Attempts to create timer.
-	else if (!timeControl->createTimer(1/this->FPS)) {
+	else if (!this->timeControl->createTimer(this->FPS)) {
 		cout << "Failed to create timer\n";
 		result = false;
 	}
 
-	//Attempts to load font.
-	else if (!graphicControl->loadFont()) {
+	/*//Attempts to load font.
+	else if (!this->graphicControl->loadFont()) {
 		cout << "Failed to load font\n";
 		result = false;
-	}
+	}*/
 	//Attempts to create display (if requested).
-	else if (displayCreation && !graphicControl->createDisplay()) {
+	else if (displayCreation && !this->graphicControl->createDisplay()) {
 		cout << "Failed to create display\n";
 		result = false;
 	}
-	else{
-		//Attempts to Initialize allBlobs to default values (for now).
-		for (int i = 0; i < this->blobAmount; i++) {
-			this->allBlobs[i] = new (nothrow) BabyBlob(this->width, this->height, defaultRelativeSpeed, 
-				defaultMaxSpeed, defaultSmellRadius, defaultDeathProb);
-			
-			//If a certain blob couldn't be created, it deletes the whole array.
-			if (!this->allBlobs[i]) {
-				this -> deleteBlobs(i);
-				result = false;
-				i = this->blobAmount;
-			}
+	//Attempts to create background.
+	else if (!this->getGraphicControl()->setBackground(this->width, this->height)) {
+		cout << "Failed to load background bitmap\n";
+		result = false;
+	}
+	else {
+		//Draws background.
+		this->getGraphicControl()->drawBackgrBit();
+		al_flip_display();
+	}
+	if (result) {
+		//Attempts to Initialize allBlobs to default values (for now) and create bitmaps.
+		if (!(initializeBlob())) {
+			cout << "Failed to create blobs\n";
+			result = false;
 		}
+		//Attempts to Initialize foodVector to default values (for now) and create bitmaps.
+		else if (!initializeFood()) {
+			cout << "Failed to create food\n";
+			result = false;
+		}
+		al_flip_display();
 	}
 
-	//Sets event source for timer.
-	if (result)
-		al_register_event_source(eventControl->getQueue(), al_get_timer_event_source(timeControl->getTimer()));
-
+	//Sets event source for timer and shows drawings.
+	if (result) {
+		al_register_event_source(this->eventControl->getQueue(), al_get_timer_event_source(this->timeControl->getTimer()));
+		al_flip_display();
+	}
 	return result;
-}
-
-//Deletes all not null Blob pointers up to a certain given index.
-void Simulation::deleteBlobs(int index) {
-	for (int j = 0; j < index; j++) {
-		if (this->allBlobs[j]) {
-			this->allBlobs[j]->destroyBitmap();
-			delete this->allBlobs[j];
-		}
-	}
 }
 
 //Frees memory.
 void Simulation::destroyAll() {
-	graphicControl->destroyGraphics();
-	eventControl->destroyEventQueue();
-	timeControl->destroyTimer();
-	deleteBlobs(blobAmount);
+	this->graphicControl->destroyGraphics();
+	this->eventControl->destroyEventQueue();
+	this->timeControl->destroyTimer();
+
+
+	this->deleteBlobs(this->blobAmount);
+	this->deleteFood(this->foodAmount);
 }
+
 
 //Class getters.
 GraphicClass* Simulation::getGraphicControl(void) { return this->graphicControl; }
 TimeClass* Simulation::getTimeControl(void) { return this->timeControl; }
 EventClass* Simulation::getEventControl(void) { return this->eventControl; }
+unsigned int Simulation::getBlobAmount(void) { return this->blobAmount; }
+Blob** Simulation::getAllBlobs(void) { return allBlobs; }
+
+//Creates blobs, loads bitmaps and draws them.
+bool Simulation::initializeFood (){
+
+	bool result = true;
+	for (int i = 0; i < this->foodAmount; i++) {
+		if (!(this->foodVector[i] = new (nothrow) Food(this->width, this->height)))
+			result = false;
+
+		else if (!(this->foodVector[i]->createBitmap(width, height)))
+			result = false;
+		else
+			this->foodVector[i]->drawBitmap();
+	}
+	return result;
+}
+
+//Creates blobs, loads bitmaps and draws them.
+bool Simulation::initializeBlob() {
+
+	bool result = true;
+	for (int i = 0; i < this->blobAmount; i++) {
+		if (!(this->allBlobs[i] = new (nothrow) BabyBlob(this->width, this->height, this->generalRelativeSpeed, this->generalMaxSpeed,
+			defaultSmellRadius, defaultDeathProb)))
+			result = false;
+
+		else if (!(this->allBlobs[i]->createBitmap(width, height, babyBitmap)))
+			result = false;
+		else
+			this->allBlobs[i]->drawBitmap();
+	}
+	return result;
+}
+
+//Deletes blob pointers.
+void Simulation::deleteBlobs(int index) {
+	for (int i = 0; i < index; i++) {
+		if (this->allBlobs[i]) {
+			this->allBlobs[i]->destroyBitmap();
+
+			delete allBlobs[i];
+		}
+	}
+}
+
+//Deletes food pointers.
+void Simulation::deleteFood(int index) {
+	for (int i = 0; i < index; i++) {
+		if (this->foodVector[i]) {
+			this->foodVector[i]->destroyBitmap();
+
+			delete foodVector[i];
+		}
+	}
+}

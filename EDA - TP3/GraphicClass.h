@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <allegro5/allegro.h>
-#include <allegro5/allegro_font.h>
+//#include <allegro5/allegro_font.h>
 
 
 class GraphicClass {
@@ -15,15 +15,19 @@ public:
 	ALLEGRO_DISPLAY* getDisplay(void);
 
 	void destroyGraphics(void);
-	void setFontName(const char* fontName_);
-	bool loadFont(void);;
+
+	bool setBackground(unsigned int width_, unsigned int height_);
+	void drawBackgrBit(void);
+//	void setFontName(const char* fontName_);
+//	bool loadFont(void);;
 
 private:
 
 	ALLEGRO_DISPLAY* display;
-	ALLEGRO_FONT* font;
-	ALLEGRO_COLOR fontColor;
+	ALLEGRO_BITMAP* backgroundBitmap;
+//	ALLEGRO_FONT* font;
+//	ALLEGRO_COLOR fontColor;
 	unsigned int width;
 	unsigned int height;
-	const char* fontName;
+//	const char* fontName;
 };

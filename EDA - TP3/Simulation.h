@@ -3,20 +3,23 @@
 #include "TimeClass.h"
 #include "GraphicClass.h"
 #include "BabyBlob.h"
+#include "Food.h"
 
 
 #define MAXBLOBAMOUNT 50
+#define FOODAMOUNT 10
 //Temporary values to check correct initialization.
 /**************************************************/
-#define defaultDisplay false
+#define defaultDisplay true
 
-#define defaultWidth 800
-#define defaultHeight 800
+#define defaultWidth 900
+#define defaultHeight 470
 #define defaultFPS 10.0
 #define defaultBlobAmount 10
 #define defaultMaxSpeed (int)(defaultWidth/40)
 #define defaultRelativeSpeed 0.5
 #define defaultMode 1
+#define defaultFoodAmount 10
 /**************************************************/
 class Simulation {
 public:
@@ -24,7 +27,7 @@ public:
 	//Simulation constructor.
 	Simulation(unsigned int width_ = defaultWidth, unsigned int height_ = defaultHeight, double FPS_ = defaultFPS,
 		unsigned int blobAmount_ = defaultBlobAmount,unsigned int generalMaxSpeed_ = defaultMaxSpeed,
-		unsigned int generalRelativeSpeed_ = defaultRelativeSpeed,int mode_ = defaultMode);
+		unsigned int generalRelativeSpeed_ = defaultRelativeSpeed,int mode_ = defaultMode, int foodAmount_ = defaultFoodAmount);
 
 	bool setSimulation(bool displayCreation = defaultDisplay);
 
@@ -40,6 +43,17 @@ public:
 
 	void deleteBlobs(int index);
 
+	unsigned int getBlobAmount(void);
+
+	Blob** getAllBlobs(void);
+
+	bool loadFood(void);
+
+	void deleteFood(int index);
+
+	bool initializeFood(void);
+	bool initializeBlob(void);
+
 private:
 
 	//Datos miembro de Simulation.
@@ -47,7 +61,8 @@ private:
 	TimeClass* timeControl;
 	EventClass* eventControl;
 	Blob* allBlobs[MAXBLOBAMOUNT];
-	unsigned int blobAmount;
+
+	unsigned int blobAmount,foodAmount;
 	unsigned int width, height;
 	int mode;
 
@@ -58,4 +73,6 @@ private:
 	float generalRelativeSpeed;
 
 	double FPS;
+
+	Food* foodVector[FOODAMOUNT];
 };
