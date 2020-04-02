@@ -6,7 +6,8 @@
 #include "Food.h"
 
 
-#define MAXBLOBAMOUNT 50
+
+#define MAXBLOBAMOUNT 100
 #define FOODAMOUNT 10
 //Temporary values to check correct initialization.
 /**************************************************/
@@ -14,12 +15,14 @@
 
 #define defaultWidth 900
 #define defaultHeight 470
-#define defaultFPS 10.0
+#define defaultFPS 11.0
 #define defaultBlobAmount 10
-#define defaultMaxSpeed 10
+#define defaultMaxSpeed 30
 #define defaultRelativeSpeed 0.5
 #define defaultMode 1
-#define defaultFoodAmount 10
+#define defaultFoodAmount 1
+#define defaultSmellRadius 400
+#define defaultDeathProb 0.05
 /**************************************************/
 class Simulation {
 public:
@@ -41,12 +44,9 @@ public:
 
 	bool initializeAll(void);
 
-	void deleteBlobs(int index);
-
 	unsigned int getBlobAmount(void);
 
 	Blob** getAllBlobs(void);
-	void deleteFood(int index);
 
 	bool initializeFood(void);
 	bool initializeBlob(void);
@@ -56,10 +56,11 @@ public:
 
 	void moveCycle(void);
 
-
-
-
-
+	void mustMerge(int* mergeVector, int length);
+	void actuallyMerge(void);
+	
+	bool blobBirth(void);
+	void blobDeath(int index);
 private:
 
 	//Datos miembro de Simulation.

@@ -1,11 +1,18 @@
+#define _USE_MATH_DEFINES
+
 #include "Blob.h"
 #include <random>
+#include <cmath>
 
-#define MAX_ANGLE 360
+
+
+#define MAX_ANGLE 2*M_PI
 #define babyBit "babyblob.png"
 //Blob constructor.
 
 Blob::Blob() {};
+
+Blob::Blob(const Blob* otherBlob) : position(otherBlob->position) {};
 
 
 Blob::Blob(unsigned int screenWidth, unsigned int screenHeight, float relativeSpeed_,
@@ -16,6 +23,7 @@ Blob::Blob(unsigned int screenWidth, unsigned int screenHeight, float relativeSp
 	this->position.y = static_cast <double> ((rand()) / (static_cast <double> (RAND_MAX)) * (screenHeight));
 	this->angle = static_cast <double> ((rand()) / (static_cast <double> (RAND_MAX)) * (MAX_ANGLE));
 	
+	this->willMerge = 0;
 	
 	//Sets given speeds and smellRadius.
 	this->relativeSpeed = relativeSpeed_;
@@ -61,12 +69,12 @@ void Blob::blobSmell(Food** foodVector_, int lenght) {
 		temp.y = foodVector_[i]->getYPosit();
 
 		//Defines distances.
-		xDist = (temp.x - position.x);
-		yDist = (temp.y - position.y);
+		xDist = (temp.x - this->position.x);
+		yDist = (temp.y - this->position.y);
 
 		//If food is within smellRadius, the blob changes its direction to point to the food.
 		if (abs(xDist) < this->smellRadius && abs(yDist) < this->smellRadius)
-			this->angle = atan(yDist / xDist);
+			this->angle = atan2(yDist, xDist);
 	}
 }
 
@@ -85,4 +93,40 @@ void Blob::blobCorrectMovement(unsigned int width_, unsigned int height_) {
 		this->position.y += height_;
 }
 
+int Blob::blobFeeding(Food** foodVector_, int amount, int* birthFlag) {
+	float xPos, yPos, xDist, yDist;
+	int result = -1;
+
+	*birthFlag = 0;
+
+	float totalSpeed = this->maxSpeed * this->relativeSpeed;
+
+	for (int i = 0; i < amount; i++) {
+
+		xPos = foodVector_[i]->getXPosit();
+		yPos = foodVector_[i]->getYPosit();
+
+		xDist = this->position.x - xPos;
+		yDist = this->position.y - yPos;
+
+		if (abs(xDist)<totalSpeed/sqrt(2) && abs(yDist)<totalSpeed/sqrt(2)) {
+			result = i;
+			i = amount;
+			this->foodEaten++;
+		}
+	}
+	if (this->checkFoodEaten())
+		*birthFlag = 1;
+	return result;
+}
+
+bool Blob::checkBlobDeath(void) {
+
+	double specificity = 0.001;
+	double num = specificity * (rand() % (int) (1/specificity));
+
+	return (num < this->deathProb);
+}
+
 Blob::~Blob() {};
+

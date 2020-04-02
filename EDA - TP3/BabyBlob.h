@@ -6,5 +6,9 @@ public:
 		unsigned int maxSpeed_, float relativeSpeed_, unsigned int smellRadius_, float deathProb_);
 
 	BabyBlob();
+
+
+	BabyBlob(Blob* otherBlob);
 };
+
 

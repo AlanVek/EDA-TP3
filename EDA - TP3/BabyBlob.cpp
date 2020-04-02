@@ -11,3 +11,8 @@ BabyBlob::BabyBlob(unsigned int screenWidth, unsigned int screenHeight,
 }
 
 BabyBlob::BabyBlob() {};
+
+BabyBlob::BabyBlob(Blob* otherBlob) {
+	this->position = *otherBlob->getBlobPosition();
+}
+

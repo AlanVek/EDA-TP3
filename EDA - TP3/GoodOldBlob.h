@@ -6,5 +6,7 @@ public:
 		unsigned int maxSpeed_, unsigned int smellRadius_, float deathProb_);
 
 	GoodOldBlob();
+
+	GoodOldBlob(Blob* otherBlob);
 };
 

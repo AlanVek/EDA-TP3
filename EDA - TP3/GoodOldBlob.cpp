@@ -14,3 +14,8 @@ GoodOldBlob::GoodOldBlob(unsigned int screenWidth, unsigned int screenHeight, fl
 }
 
 GoodOldBlob::GoodOldBlob() {};
+
+
+GoodOldBlob::GoodOldBlob(Blob* otherBlob) {
+	this->position = *otherBlob->getBlobPosition();
+}

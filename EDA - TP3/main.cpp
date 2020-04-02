@@ -36,10 +36,9 @@ int main()
     while (result && !endOfInput) {
         if (mySim->getEventControl()->getNextEventType() == ALLEGRO_EVENT_TIMER) {
             mySim->moveCycle();
+            suma++;
         }
-        al_rest(2); 
-        suma++;
-        if (suma == 4) {
+        if (suma == 500) {
             break;
         }
     }

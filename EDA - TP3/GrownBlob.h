@@ -8,5 +8,7 @@ public:
 		unsigned int maxSpeed_, unsigned int smellRadius_, float deathProb_);
 
 	GrownBlob();
+
+	GrownBlob(Blob* otherBlob);
 };
 

@@ -171,6 +171,7 @@
   <ItemGroup>
     <ClInclude Include="BabyBlob.h" />
     <ClInclude Include="Food.h" />
+    <ClInclude Include="Templates.h" />
     <ClInclude Include="Simulation.h" />
     <ClInclude Include="Blob.h" />
     <ClInclude Include="EventClass.h" />
