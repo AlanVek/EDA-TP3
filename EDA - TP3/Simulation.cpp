@@ -84,9 +84,15 @@ bool Simulation::setSimulation(bool displayCreation) {
 		cout << "Failed to create time pointer\n";
 		result = false;
 	}
+	//Attempts to create display (if requested).
+	else if (displayCreation && !graphicControl->createDisplay()) {
+		cout << "Failed to create display\n";
+		result = false;
+	}
 	//Attempts to create event queue.
 	else if (!eventControl->createEventQueue()) {
 		cout << "Failed to create event queue\n";
+		al_register_event_source(eventControl->getQueue(), al_get_display_event_source(graphicControl->getDisplay()));
 		result = false;
 	}
 
@@ -96,11 +102,7 @@ bool Simulation::setSimulation(bool displayCreation) {
 		result = false;
 	}
 
-	//Attempts to create display (if requested).
-	else if (displayCreation && !graphicControl->createDisplay()) {
-		cout << "Failed to create display\n";
-		result = false;
-	}
+
 	//Attempts to create bitmaps.
 	else if (!graphicControl->initializeBitmaps(width, height)) {
 		cout << "Failed to load background bitmaps\n";
@@ -118,13 +120,14 @@ bool Simulation::setSimulation(bool displayCreation) {
 			cout << "Failed to create food\n";
 			result = false;
 		}
-		al_flip_display();
 	}
 
 	//Sets event source for timer and shows drawings.
 	if (result) {
 		al_register_event_source(eventControl->getQueue(), al_get_timer_event_source(timeControl->getTimer()));
 		al_register_event_source(eventControl->getQueue(), al_get_keyboard_event_source());
+		al_install_mouse();		
+		al_register_event_source(eventControl->getQueue(), al_get_mouse_event_source());
 	}
 	return result;
 }
@@ -224,8 +227,6 @@ void Simulation::moveCycle(void) {
 	Merges();
 
 	drawItAll();
-
-	al_flip_display();
 }
 
 void Simulation::drawAccordingBitmap(Blob* thisBlob) {
