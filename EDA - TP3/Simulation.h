@@ -55,7 +55,7 @@ public:
 
 	void moveCycle(void);
 
-	bool blobBirth(void);
+	bool blobBirth(newBirth thisBirth);
 	void blobDeath(int index);
 
 	void drawItAll(void);

@@ -5,7 +5,12 @@
 typedef struct {
 	float x;
 	float y;
-} Position;
+} Position; 
+
+typedef struct {
+	Position birthPosition;
+	int birthFlag;
+} newBirth;
 
 class Blob
 {
@@ -21,7 +26,7 @@ public:
 	
 	//Checkers.
 	bool checkBlobDeath(void);
-	int blobFeeding(Food** foodVector_, int amount, int* birthFlag);
+	int blobFeeding(Food** foodVector_, int amount, newBirth* thisBirth);
 	bool checkFoodEaten(void);
 	void blobMove(unsigned int width_, unsigned int height_);
 	void blobCorrectMovement(unsigned int width_, unsigned int height_);
@@ -49,6 +54,7 @@ public:
 
 	virtual ~Blob();
 
+	void setPosition(newBirth);
 
 protected:
 	Position position;

@@ -105,11 +105,11 @@ void Blob::blobCorrectMovement(unsigned int width_, unsigned int height_) {
 }
 
 //Checks if blob is on top of food and modifies foodEaten accordingly.
-int Blob::blobFeeding(Food** foodVector_, int amount, int* birthFlag) {
+int Blob::blobFeeding(Food** foodVector_, int amount, newBirth* thisBirth) {
 	float xPos, yPos, xDist, yDist;
 	int result = -1;
 
-	*birthFlag = 0;
+	thisBirth->birthFlag = 0;
 
 	for (int i = 0; i < amount; i++) {
 
@@ -127,8 +127,10 @@ int Blob::blobFeeding(Food** foodVector_, int amount, int* birthFlag) {
 	}
 
 	//Checks if blob "is full" (will trigger a blobBirth).
-	if (checkFoodEaten())
-		*birthFlag = 1;
+	if (checkFoodEaten()) {
+		thisBirth->birthFlag = 1;
+		thisBirth->birthPosition = this->position;
+	}
 	return result;
 }
 
@@ -192,3 +194,8 @@ void Blob::setDeathProb(float deathProb_) { deathProb = deathProb_; }
 
 Blob::~Blob() {};
 
+
+void Blob::setPosition(newBirth thisBirth) {
+	position.x = thisBirth.birthPosition.x;
+	position.y = thisBirth.birthPosition.y;
+}

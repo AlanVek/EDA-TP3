@@ -12,6 +12,7 @@
 
 using namespace std;
 
+
 //Simulation constructor.
 Simulation::Simulation(unsigned int width_, unsigned int height_, double FPS_, unsigned int blobAmount_, 
 	unsigned int generalMaxSpeed_, float generalRelativeSpeed_, int mode_, int foodCount_) : 
@@ -173,9 +174,8 @@ void Simulation::moveCycle(void) {
 	float xPos, yPos;
 
 	int hasBeenEaten;
-	//Temporary place to point flag.
-	int a = 0;
-	int* birthFlag = &a;
+
+	newBirth newBaby;
 
 	al_set_target_backbuffer(graphicControl->getDisplay());
 
@@ -197,13 +197,13 @@ void Simulation::moveCycle(void) {
 		allBlobs[i]->blobMove(width, height);
 
 		//Checks for eaten food.
-		hasBeenEaten = allBlobs[i]->blobFeeding(allFoods, foodCount,birthFlag);
+		hasBeenEaten = allBlobs[i]->blobFeeding(allFoods, foodCount,&newBaby);
 		if ( hasBeenEaten != -1)
 			allFoods[hasBeenEaten]->NewPosition(width, height);
 
 		//Checks for potential blobBirth.
-		if (*birthFlag) {
-			if (!blobBirth())
+		if (newBaby.birthFlag) {
+			if (!blobBirth(newBaby))
 				cout << "Runtime Error. Failed to create new BabyBlob.\n";
 		}
 	}
@@ -316,15 +316,16 @@ void Simulation::Merges() {
 }
 
 //Attempts to create a new BabyBlob and appends it to the allBlobs array and increment blobAmount.
-bool Simulation::blobBirth(void) {
+bool Simulation::blobBirth(newBirth thisBirth) {
 	bool result = true;
 	if (!(allBlobs[blobAmount] = new (nothrow) BabyBlob(width, height, generalMaxSpeed,
-		generalRelativeSpeed, defaultSmellRadius, defaultDeathProb)))
+		generalRelativeSpeed, thisGUI.smellRadius, thisGUI.babyDeathProb)))
 		result = false;
 	
-	if (result)
+	if (result) {
+		allBlobs[blobAmount]->setPosition(thisBirth);
 		blobAmount++;
-
+	}
 	return result;
 }
 

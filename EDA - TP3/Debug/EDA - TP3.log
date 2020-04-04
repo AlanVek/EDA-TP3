@@ -1,2 +1,6 @@
-﻿  GUI.cpp
+﻿  Food.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(8,109): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(9,110): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(19,78): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(20,78): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
   EDA - TP3.vcxproj -> C:\Users\alanv\source\repos\EDA - TP3\Debug\EDA - TP3.exe
