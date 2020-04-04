@@ -8,7 +8,7 @@
 #define maxRelSpeedLimit 1.0f
 #define minMaxSpeedLimit 0.0f
 #define maxMaxSpeedLimit 30.0f
-#define minBlobCount 1
+#define minBlobCount 0
 #define maxBlobCount 30
 #define minRandomJiggleLimit 0.001
 #define maxRandomJiggleLimit 0.5
@@ -203,6 +203,9 @@ bool GUI::GUI_Game_Loop(void) {
     //Shows current state next to button.
     ImGui::SameLine();
     ImGui::Text("%s", pause ? "Paused" : "Unpaused");
+
+    ImGui::Text("Game will end when either user presses ESC or all blobs die. :)");
+
     ImGui::End();
 
     ImGui::Render();
