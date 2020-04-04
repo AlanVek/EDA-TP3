@@ -1,9 +1,6 @@
 #include <iostream>
 #include "Simulation.h"
 
-//#define fontName "BOSQUE.ttf"
-#define babyBitmap "food.png"
-
 using namespace std;
 
 int main()
@@ -14,6 +11,7 @@ int main()
     Simulation* mySim = new (nothrow) Simulation;
 
     srand(time(NULL));
+
     //Checks for memory allocation error.
     if (!mySim) {
         cout << "Failed to crate simulation\.";
@@ -22,7 +20,6 @@ int main()
 
     //If mySim was successfully created...
     if (result) {
-        //mySim->getGraphicControl()->setFontName(fontName);
 
         //Attempts to initialize simulation.
         if (!mySim->initializeAll()) {
@@ -30,18 +27,22 @@ int main()
             result = false;
         }
     }
+
+    mySim->getGUI()->GUI_firstLoop();
+    if (!mySim->getFirstData())
+        endOfInput = true;
     mySim->getTimeControl()->startTimer();
 
-    while (result && !endOfInput) {
-        if (mySim->getEventControl()->getNextEventType() == ALLEGRO_EVENT_TIMER) {
+    while (mySim->getBlobAmount() && !endOfInput) {
+        if (!mySim->getGUI()->GUI_Game_Loop())
+            break;
+        
+        mySim->getData();
+        
+        if (mySim->getEventControl()->getNextEventType() == ALLEGRO_EVENT_TIMER && !(mySim->getGUI()->pause))
             mySim->moveCycle();
-        }
-        if (mySim->getEventControl()->getEvent().type == ALLEGRO_EVENT_KEY_DOWN)
-            endOfInput = true;
-        if (mySim->getBlobAmount() == 0) {
-            endOfInput = true;
-        }
     }
+
 
     delete mySim;
     return 0;

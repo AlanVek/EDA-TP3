@@ -181,5 +181,14 @@ int Blob::getMinDist(Position* tempPosVector, int size) {
 	return minPos;
 }
 
+
+void Blob::setNewData(float generalMaxSpeed_, float generalRelativeSpeed_, float smellRadius_) {
+	maxSpeed = generalMaxSpeed_;
+	relativeSpeed = generalRelativeSpeed_;
+	smellRadius = smellRadius_;
+}
+
+void Blob::setDeathProb(float deathProb_) { deathProb = deathProb_; }
+
 Blob::~Blob() {};
 

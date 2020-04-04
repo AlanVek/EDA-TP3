@@ -4,6 +4,7 @@
 #include "GraphicClass.h"
 #include "Blob.h"
 #include "Food.h"
+#include "GUI.h"
 
 
 
@@ -16,22 +17,22 @@
 #define defaultWidth 900
 #define defaultHeight 470
 #define defaultFPS 11.0
-#define defaultBlobAmount 10
-#define defaultMaxSpeed 30
-#define defaultRelativeSpeed 0.5
+#define defaultBlobAmount 1
+#define defaultMaxSpeed 0
+#define defaultRelativeSpeed 0
 #define defaultMode 1
-#define defaultFoodAmount 10
-#define defaultSmellRadius 150
-#define defaultDeathProb 0.01
-#define randomJiggleLimit 1
+#define defaultFoodAmount 0
+#define defaultSmellRadius 0
+#define defaultDeathProb 0.0
+#define randomJiggleLimit 0
 /**************************************************/
 class Simulation {
 public:
 
 	//Simulation constructor.
 	Simulation(unsigned int width_ = defaultWidth, unsigned int height_ = defaultHeight, double FPS_ = defaultFPS,
-		unsigned int blobAmount_ = defaultBlobAmount,unsigned int generalMaxSpeed_ = defaultMaxSpeed,
-		float generalRelativeSpeed_ = defaultRelativeSpeed,int mode_ = defaultMode, int foodAmount_ = defaultFoodAmount);
+		unsigned int blobAmount_ = defaultBlobAmount, unsigned int generalMaxSpeed_ = defaultMaxSpeed,
+		float generalRelativeSpeed_ = defaultRelativeSpeed, int mode_ = defaultMode, int foodAmount_ = defaultFoodAmount);
 
 	bool setSimulation(bool displayCreation = defaultDisplay);
 
@@ -47,13 +48,13 @@ public:
 
 	Blob** getAllBlobs(void);
 
-	bool initializeFood(void);
+	bool initializeFood(int foodCount_);
 	bool initializeBlob(void);
 
 	void drawAccordingBitmap(Blob* thisBlob);
 
 	void moveCycle(void);
-	
+
 	bool blobBirth(void);
 	void blobDeath(int index);
 
@@ -61,7 +62,16 @@ public:
 
 	void Merges(void);
 
+	void getData(void);
+
+	bool getFirstData(void);
+
 	~Simulation();
+
+	GUI* getGUI(void);
+
+	void deleteFood(int amount);
+
 private:
 
 	//Datos miembro de Simulation.
@@ -82,4 +92,6 @@ private:
 	float generalRelativeSpeed;
 
 	double FPS;
+
+	GUI thisGUI;
 };

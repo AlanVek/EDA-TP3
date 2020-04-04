@@ -43,6 +43,9 @@ public:
 
 	int getMinDist(Position* tempPosVector, int size);
 
+	void setNewData(float generalMaxSpeed_, float generalRelativeSpeed_, float smellRadius_);
+
+	void setDeathProb(float deathProb_);
 
 	virtual ~Blob();
 

@@ -10,7 +10,7 @@ public:
 
 	bool createDisplay(void);
 
-	ALLEGRO_DISPLAY* getDisplay(void);
+	ALLEGRO_DISPLAY*& getDisplay(void);
 
 	~GraphicClass();
 

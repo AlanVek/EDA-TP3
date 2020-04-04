@@ -1,7 +1,7 @@
 #include "GoodOldBlob.h"
 
 #define MAXOLDFOOD 3
-#define GOODOLDBITWIDTH 100
+#define GOODOLDBITWIDTH 70
 
 GoodOldBlob::GoodOldBlob(unsigned int screenWidth, unsigned int screenHeight, float relativeSpeed_,
 	unsigned int maxSpeed_, unsigned int smellRadius_, float deathProb_) :

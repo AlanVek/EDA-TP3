@@ -36,7 +36,7 @@ bool GraphicClass::createDisplay(void) {
 //void GraphicClass::setFontName(const char* fontName_) { fontName = fontName_; }
 
 //Gets display.
-ALLEGRO_DISPLAY* GraphicClass::getDisplay(void) { return display; }
+ALLEGRO_DISPLAY*& GraphicClass::getDisplay(void) { return display; }
 
 //Frees memory.
 GraphicClass::~GraphicClass(void) {

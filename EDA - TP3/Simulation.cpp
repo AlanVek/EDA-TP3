@@ -1,12 +1,13 @@
 #include "Simulation.h"
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
 #include "Templates.h"
 #include <typeinfo>
 #include "GrownBlob.h"
 #include "GoodOldBlob.h"
 #include "BabyBlob.h"
 #include <allegro5/keyboard.h>
-
+#include <random>
 #define radius 15
 
 using namespace std;
@@ -38,6 +39,9 @@ bool Simulation::initializeAll(void) {
 		cout << "Failed to set simulation.\n";
 		result = false;
 	}
+
+	thisGUI.GUI_setUp();
+	thisGUI.setDependencies();
 	
 	return result;
 }
@@ -56,8 +60,19 @@ bool Simulation::setAllegro(void) {
 		cout << "Failed to initialize image addon\n";
 		result = false;
 	}
+	else if (!al_init_primitives_addon()) {
+		cout << "Failed to initialize primitives addon\n";
+		result = false;
+	}
+	else if (!al_install_mouse()) {
+		cout << "Failed to install mouse\n";
+		result = false;
+	}
 
-	al_install_keyboard();
+	else if (!al_install_keyboard()) {
+		cout << "Failed to install keyboard\n";
+		result = false;
+	}
 
 	return result;
 }
@@ -107,24 +122,10 @@ bool Simulation::setSimulation(bool displayCreation) {
 		result = false;
 	}
 
-	if (result) {
-		//Attempts to Initialize allBlobs to default values (for now) and create bitmaps.
-		if (!(initializeBlob())) {
-			cout << "Failed to create blobs\n";
-			result = false;
-		}
-		//Attempts to Initialize allFoods to default values (for now) and create bitmaps.
-		else if (!initializeFood()) {
-			cout << "Failed to create food\n";
-			result = false;
-		}
-		al_flip_display();
-	}
-
 	//Sets event source for timer and shows drawings.
 	if (result) {
 		al_register_event_source(eventControl->getQueue(), al_get_timer_event_source(timeControl->getTimer()));
-		al_register_event_source(eventControl->getQueue(), al_get_keyboard_event_source());
+		al_register_event_source(eventControl->getQueue(), al_get_display_event_source(graphicControl->getDisplay()));
 	}
 	return result;
 }
@@ -136,16 +137,15 @@ EventClass* Simulation::getEventControl(void) { return eventControl; }
 unsigned int Simulation::getBlobAmount(void) { return blobAmount; }
 Blob** Simulation::getAllBlobs(void) { return allBlobs; }
 
+GUI* Simulation::getGUI(void) { return &thisGUI; }
+
 //Creates food, loads bitmaps and draws them.
-bool Simulation::initializeFood (){
+bool Simulation::initializeFood (int foodCount_){
 
 	bool result = true;
-	for (int i = 0; i < foodCount; i++) {
-		if (!(allFoods[i] = new (nothrow) Food(width, height)))
+	for (int i = 0; i < foodCount_; i++) {
+		if (!(allFoods[foodCount+i] = new (nothrow) Food(width, height)))
 			result = false;
-		else
-			graphicControl->drawBitmap(graphicControl->getFoodBit(),
-				allFoods[i]->getXPosit(),allFoods[i]->getYPosit());
 	}
 	return result;
 }
@@ -154,34 +154,19 @@ bool Simulation::initializeFood (){
 bool Simulation::initializeBlob() {
 	float xPos, yPos;
 	bool result = true;
-
-	float gMaxSpeed;
-	float gRelSpeed;
-
-
+	float maxSpeed_ = 0;
 	for (int i = 0; i < blobAmount; i++) {
 		
-		if (mode == 1) {
-			gMaxSpeed = defaultMaxSpeed;
-			gRelSpeed = 0.001 * (rand() % 1000);
-		}
-		else {
-			gMaxSpeed = rand() % defaultMaxSpeed;
-			gRelSpeed = defaultRelativeSpeed;
-		}
-		if (!(allBlobs[i] = new (nothrow) BabyBlob(width, height, gMaxSpeed,
-			gRelSpeed, defaultSmellRadius, defaultDeathProb)))
+		if (thisGUI.mode)
+			maxSpeed_ = static_cast <double> ((rand()) / (static_cast <double> (RAND_MAX)) * (thisGUI.maxSpeed));
+		else
+			maxSpeed_ = thisGUI.maxSpeed;
+		if (!(allBlobs[i] = new (nothrow) BabyBlob(width, height, maxSpeed_,
+			0, thisGUI.smellRadius, thisGUI.babyDeathProb)))
 			result = false;
-
-		else {
-			xPos = allBlobs[i]->getBlobPosition()->x;
-			yPos = allBlobs[i]->getBlobPosition()->y;
-			drawAccordingBitmap(allBlobs[i]);
-		}
 	}
 	return result;
 }
-
 
 void Simulation::moveCycle(void) {
 
@@ -191,6 +176,9 @@ void Simulation::moveCycle(void) {
 	//Temporary place to point flag.
 	int a = 0;
 	int* birthFlag = &a;
+
+	al_set_target_backbuffer(graphicControl->getDisplay());
+
 
 	//First, it checks for blobDeaths and adjusts blobAmount accordingly.
 	for (int i = 0; i < blobAmount; i++) {
@@ -306,18 +294,17 @@ void Simulation::Merges() {
 					hasMerged divides everything by thisMerge to obtain the mean. */
 					allBlobs[i]->hasMerged(thisMerge);
 
-					randomJ = (float) (rand() % (randomJiggleLimit*100))/100.0;
-
+					float randomJL = static_cast <double> ((rand()) / (static_cast <double> (RAND_MAX)) * (thisGUI.randomJL));
 					//Finally, allBlobs[i] evolves (distinguish between cases).
 					if (typeID == typeid(BabyBlob).hash_code()) {
-						GrownBlob tempBlob(allBlobs[i], randomJ);
+						GrownBlob tempBlob(allBlobs[i], randomJL);
 
 						delete allBlobs[i];
 						allBlobs[i] = new (nothrow) GrownBlob(tempBlob);
 					}
 
 					else {
-						GoodOldBlob tempBlob(allBlobs[i], randomJ);
+						GoodOldBlob tempBlob(allBlobs[i], randomJL);
 
 						delete allBlobs[i];
 						allBlobs[i] = new (nothrow) GoodOldBlob(tempBlob);
@@ -380,4 +367,64 @@ Simulation::~Simulation() {
 	deleteArray < Blob* >(allBlobs, blobAmount);
 
 	deleteArray < Food* >(allFoods, foodCount);
+}
+
+//Gets data from GUI and updates simulation and blobs parameters.
+void Simulation::getData(void) {
+
+	float typeID;
+	for (int i = 0; i < blobAmount; i++) {
+		typeID = typeid(*allBlobs[i]).hash_code();
+
+		if (typeID == typeid(BabyBlob).hash_code())
+			allBlobs[i]->setDeathProb(thisGUI.babyDeathProb);
+
+		if (typeID == typeid(GrownBlob).hash_code())
+			allBlobs[i]->setDeathProb(thisGUI.grownDeathProb);
+
+		if (typeID == typeid(GoodOldBlob).hash_code())
+			allBlobs[i]->setDeathProb(thisGUI.goodOldDeathProb);
+
+		allBlobs[i]->setNewData(thisGUI.maxSpeed, thisGUI.relSpeed, thisGUI.smellRadius);
+	}
+
+	if (thisGUI.foodCount >= foodCount) {
+		initializeFood(thisGUI.foodCount - foodCount);
+	}
+	else{
+		deleteFood(foodCount - thisGUI.foodCount);
+	}
+	foodCount = thisGUI.foodCount;
+	
+}
+
+//Gets first set of data to initialize blobs and food.
+bool Simulation::getFirstData(void) {
+	
+	bool result = true;
+	blobAmount = thisGUI.blobCount;
+	foodCount = thisGUI.foodCount;
+	mode = thisGUI.mode;
+	
+	//Attempts to Initialize allBlobs to default values (for now) and create bitmaps.
+	if (!(initializeBlob())) {
+		cout << "Failed to create blobs\n";
+		result = false;
+	}
+	//Attempts to Initialize allFoods to default values (for now) and create bitmaps.
+	else if (!initializeFood(foodCount)) {
+		cout << "Failed to create food\n";
+		result = false;
+	}
+	return result;
+}
+
+//Deletes food when the user changed from original amount to (<) new amount.
+void Simulation::deleteFood(int amount) {
+	int temp = foodCount;
+	for (int i = foodCount - amount; i < foodCount; i++) {
+		delete allFoods[i];
+		temp--;
+	}
+	foodCount = temp;
 }
