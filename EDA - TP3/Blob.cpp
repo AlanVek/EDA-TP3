@@ -194,8 +194,8 @@ void Blob::setDeathProb(float deathProb_) { deathProb = deathProb_; }
 
 Blob::~Blob() {};
 
-
+/*
 void Blob::setPosition(newBirth thisBirth) {
 	position.x = thisBirth.birthPosition.x;
 	position.y = thisBirth.birthPosition.y;
-}
+}*/

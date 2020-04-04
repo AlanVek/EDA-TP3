@@ -11,6 +11,9 @@ public:
 	BabyBlob(Blob* otherBlob, float randomJ);
 
 	~BabyBlob();
+
+protected:
+	
 };
 
 

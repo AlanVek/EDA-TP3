@@ -323,7 +323,7 @@ bool Simulation::blobBirth(newBirth thisBirth) {
 		result = false;
 	
 	if (result) {
-		allBlobs[blobAmount]->setPosition(thisBirth);
+		//allBlobs[blobAmount]->setPosition(thisBirth);
 		blobAmount++;
 	}
 	return result;

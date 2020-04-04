@@ -1,6 +1,34 @@
-﻿  Food.cpp
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(8,109): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(9,110): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(19,78): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(20,78): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+﻿  BabyBlob.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\BabyBlob.cpp(9,50): warning C4244: 'argumento': conversión de 'unsigned int' a 'float'; posible pérdida de datos
+  Blob.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(21,82): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(22,82): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(23,77): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(38,27): warning C4018: '>=': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(190,16): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+  GoodOldBlob.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\GoodOldBlob.cpp(9,50): warning C4244: 'argumento': conversión de 'unsigned int' a 'float'; posible pérdida de datos
+  GrownBlob.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\GrownBlob.cpp(9,50): warning C4244: 'argumento': conversión de 'unsigned int' a 'float'; posible pérdida de datos
+  Simulation.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(159,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(156,8): warning C4101: 'xPos': variable local sin referencia
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(156,14): warning C4101: 'yPos': variable local sin referencia
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(184,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(192,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(196,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(174,8): warning C4101: 'xPos': variable local sin referencia
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(174,14): warning C4101: 'yPos': variable local sin referencia
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(252,21): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(267,27): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(248,16): warning C4101: 'randomJ': variable local sin referencia
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(336,24): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(350,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(355,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(377,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(392,24): warning C4018: '>=': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(426,37): warning C4018: '<': no coinciden signed/unsigned
+  main.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\main.cpp(17,17): warning C4129: '.': secuencia de escape de carácter no reconocida
+  Generando código...
   EDA - TP3.vcxproj -> C:\Users\alanv\source\repos\EDA - TP3\Debug\EDA - TP3.exe

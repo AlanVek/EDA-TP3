@@ -54,7 +54,7 @@ public:
 
 	virtual ~Blob();
 
-	void setPosition(newBirth);
+	//void setPosition(newBirth);
 
 protected:
 	Position position;
