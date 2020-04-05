@@ -18,6 +18,7 @@
 #define maxFoodCountLimit 30
 #define GUIHeight 400
 #define GUIWidth 750
+#define MAXDEATHPROB 0.01f
 
 
 //GUI constructor.
@@ -177,9 +178,9 @@ bool GUI::GUI_Game_Loop(void) {
     ImGui::SliderFloat("General relative speed", &relSpeed, minRelSpeedLimit, maxRelSpeedLimit);
 
     //Sets sliders for death probabilities.
-    ImGui::SliderFloat("Death probability - Baby Blob", &babyDeathProb, 0.0f, 1.0f);
-    ImGui::SliderFloat("Death probability - Grown Blob", &grownDeathProb, 0.0f, 1.0f);
-    ImGui::SliderFloat("Death probability - Good Old Blob", &goodOldDeathProb, 0.0f, 1.0f);
+    ImGui::SliderFloat("Death probability - Baby Blob", &babyDeathProb, 0.0f, MAXDEATHPROB);
+    ImGui::SliderFloat("Death probability - Grown Blob", &grownDeathProb, 0.0f, MAXDEATHPROB);
+    ImGui::SliderFloat("Death probability - Good Old Blob", &goodOldDeathProb, 0.0f, MAXDEATHPROB);
     ImGui::SliderFloat("Random Jiggle Limit", &randomJL, minRandomJiggleLimit, maxRandomJiggleLimit);
 
     //Sets input bars for smell radius(float), random jiggle limit(float) and food count (int).

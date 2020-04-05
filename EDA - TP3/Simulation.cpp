@@ -251,7 +251,7 @@ void Simulation::Merges() {
 	if (blobAmount) {
 		for (int i = 0; i < blobAmount - 1; i++) {
 
-			typeID = typeid (*allBlobs[i]).hash_code();
+			typeID = typeid (*allBlobs[i]).hash_code();		
 
 			//First, checks if allBlobs{i] can actually merge (is not a GoodOldBlob).
 			if (typeID != typeid (GoodOldBlob).hash_code()) {
@@ -406,6 +406,7 @@ bool Simulation::getFirstData(void) {
 	blobAmount = thisGUI.blobCount;
 	foodCount = thisGUI.foodCount;
 	mode = thisGUI.mode;
+	
 	
 	//Attempts to Initialize allBlobs to default values (for now) and create bitmaps.
 	if (!(initializeBlob())) {

@@ -35,14 +35,13 @@ int main()
 
     while (mySim->getBlobAmount() && !endOfInput) {
         if (!mySim->getGUI()->GUI_Game_Loop())
-            break;
+            endOfInput = true;
         
         mySim->getData();
         
         if (mySim->getEventControl()->getNextEventType() == ALLEGRO_EVENT_TIMER && !(mySim->getGUI()->pause))
             mySim->moveCycle();
     }
-
 
     delete mySim;
     return 0;

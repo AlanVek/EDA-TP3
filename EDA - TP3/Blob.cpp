@@ -6,6 +6,8 @@
 #include <math.h>
 #include <iostream>
 
+
+#define BITMAPWIDTH 10
 #define MAX_ANGLE 2*M_PI
 
 //Blob constructors.
@@ -18,8 +20,8 @@ Blob::Blob(unsigned int screenWidth, unsigned int screenHeight, float relativeSp
 	float maxSpeed_,unsigned int smellRadius_, float deathProb_) {
 	
 	//Generates random X and Y position, and random angle.
-	position.x = static_cast <double> ((rand()) / (static_cast <double> (RAND_MAX)) * (screenWidth));
-	position.y = static_cast <double> ((rand()) / (static_cast <double> (RAND_MAX)) * (screenHeight));
+	position.x = static_cast <double> ((rand()) / (static_cast <double> (RAND_MAX)) * (screenWidth - BITMAPWIDTH*2)) + BITMAPWIDTH ;
+	position.y = static_cast <double> ((rand()) / (static_cast <double> (RAND_MAX)) * (screenHeight - 2*BITMAPWIDTH)) + BITMAPWIDTH;
 	angle = static_cast <double> ((rand()) / (static_cast <double> (RAND_MAX)) * (MAX_ANGLE));
 	
 	//Sets given speeds and smellRadius.
@@ -48,7 +50,7 @@ void Blob::blobMove(unsigned int width_, unsigned int height_) {
 	position.y += (maxSpeed * relativeSpeed * sin(angle));
 
 	//After moving, corrects final position.
-	blobCorrectMovement(width_, height_);
+	blobCorrectMovement(width_ + BITMAPWIDTH, height_ + BITMAPWIDTH);
 }
 
 //Checks for nearest food within smellRadius.
