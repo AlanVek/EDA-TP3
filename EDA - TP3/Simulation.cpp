@@ -8,10 +8,9 @@
 #include "BabyBlob.h"
 #include <allegro5/keyboard.h>
 #include <random>
-#define radius 15
+
 
 using namespace std;
-
 
 //Simulation constructor.
 Simulation::Simulation(unsigned int width_, unsigned int height_, double FPS_, unsigned int blobAmount_, 
@@ -52,26 +51,21 @@ the correspondent message if any process failed. */
 bool Simulation::setAllegro(void) {
 	bool result = true;
 	if (!al_init()) {
-		cout << "Failed to Initialize Allegro\n";
 		result = false;
 	}
 
 	//Attempts to initialize image addon.
 	else if (!al_init_image_addon()) {
-		cout << "Failed to initialize image addon\n";
 		result = false;
 	}
 	else if (!al_init_primitives_addon()) {
-		cout << "Failed to initialize primitives addon\n";
 		result = false;
 	}
 	else if (!al_install_mouse()) {
-		cout << "Failed to install mouse\n";
 		result = false;
 	}
 
 	else if (!al_install_keyboard()) {
-		cout << "Failed to install keyboard\n";
 		result = false;
 	}
 
@@ -89,37 +83,30 @@ bool Simulation::setSimulation(bool displayCreation) {
 	eventControl = new (nothrow) EventClass();
 	timeControl = new (nothrow) TimeClass();
 	if (!graphicControl) {
-		cout << "Failed to create graphic pointer\n";
 		result = false;
 	}
 	else if (!eventControl) {
-		cout << "Failed to create event pointer\n";
 		result = false;
 	}
 	else if (!timeControl) {
-		cout << "Failed to create time pointer\n";
 		result = false;
 	}
 	//Attempts to create event queue.
 	else if (!eventControl->createEventQueue()) {
-		cout << "Failed to create event queue\n";
 		result = false;
 	}
 
 	//Attempts to create timer.
 	else if (!timeControl->createTimer(FPS)) {
-		cout << "Failed to create timer\n";
 		result = false;
 	}
 
 	//Attempts to create display (if requested).
 	else if (displayCreation && !graphicControl->createDisplay()) {
-		cout << "Failed to create display\n";
 		result = false;
 	}
 	//Attempts to create bitmaps.
 	else if (!graphicControl->initializeBitmaps(width, height)) {
-		cout << "Failed to load background bitmaps\n";
 		result = false;
 	}
 
@@ -169,7 +156,7 @@ bool Simulation::initializeBlob() {
 	return result;
 }
 
-void Simulation::moveCycle(void) {
+bool Simulation::moveCycle(void) {
 
 	float xPos, yPos;
 
@@ -204,7 +191,7 @@ void Simulation::moveCycle(void) {
 		//Checks for potential blobBirth.
 		if (newBaby.birthFlag) {
 			if (!blobBirth(newBaby))
-				cout << "Runtime Error. Failed to create new BabyBlob.\n";
+				return false;
 		}
 	}
 
@@ -214,6 +201,7 @@ void Simulation::moveCycle(void) {
 	drawItAll();
 
 	al_flip_display();
+	return true;
 }
 
 void Simulation::drawAccordingBitmap(Blob* thisBlob) {
@@ -410,12 +398,10 @@ bool Simulation::getFirstData(void) {
 	
 	//Attempts to Initialize allBlobs to default values (for now) and create bitmaps.
 	if (!(initializeBlob())) {
-		cout << "Failed to create blobs\n";
 		result = false;
 	}
 	//Attempts to Initialize allFoods to default values (for now) and create bitmaps.
 	else if (!initializeFood(foodCount)) {
-		cout << "Failed to create food\n";
 		result = false;
 	}
 	return result;

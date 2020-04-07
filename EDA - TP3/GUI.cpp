@@ -9,13 +9,13 @@
 #define minMaxSpeedLimit 0.0f
 #define maxMaxSpeedLimit 30.0f
 #define minBlobCount 0
-#define maxBlobCount 30
+#define maxBlobCount 50
 #define minRandomJiggleLimit 0.001
 #define maxRandomJiggleLimit 0.5
 #define minSmellRadiusLimit 0.0f
 #define maxSmellRadiusLimit 200.0f
 #define minFoodCountLimit 0
-#define maxFoodCountLimit 30
+#define maxFoodCountLimit 50
 #define GUIHeight 400
 #define GUIWidth 750
 #define MAXDEATHPROB 0.01f
@@ -115,8 +115,9 @@ bool GUI::GUI_firstLoop(void) {
         //If user pressed this button, the initial setup is complete.
         if (ImGui::Button("Initial setup done!"))
             endOfSetUp = true;
-        
+
         ImGui::End();
+
 
         //Rendering.
         ImGui::Render();

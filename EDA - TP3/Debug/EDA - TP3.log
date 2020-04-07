@@ -1,22 +1,48 @@
-﻿  Simulation.cpp
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(159,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(156,8): warning C4101: 'xPos': variable local sin referencia
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(156,14): warning C4101: 'yPos': variable local sin referencia
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(184,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(192,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(196,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(174,8): warning C4101: 'xPos': variable local sin referencia
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(174,14): warning C4101: 'yPos': variable local sin referencia
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(252,21): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(267,27): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(248,16): warning C4101: 'randomJ': variable local sin referencia
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(336,24): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(350,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(355,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(377,20): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(392,24): warning C4018: '>=': no coinciden signed/unsigned
-C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(427,37): warning C4018: '<': no coinciden signed/unsigned
+﻿  BabyBlob.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\BabyBlob.cpp(9,50): warning C4244: 'argumento': conversión de 'unsigned int' a 'float'; posible pérdida de datos
+  Food.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(8,109): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(9,110): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(19,78): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Food.cpp(20,78): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+  GUI.cpp
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_allegro5.cpp
+  imgui_widgets.cpp
+  Simulation.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(146,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(143,8): warning C4101: 'xPos': variable local sin referencia
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(143,14): warning C4101: 'yPos': variable local sin referencia
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(171,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(179,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(183,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(161,8): warning C4101: 'xPos': variable local sin referencia
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(161,14): warning C4101: 'yPos': variable local sin referencia
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(240,21): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(255,27): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(236,16): warning C4101: 'randomJ': variable local sin referencia
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(324,24): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(338,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(343,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(365,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(380,24): warning C4018: '>=': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Simulation.cpp(413,37): warning C4018: '<': no coinciden signed/unsigned
+  Blob.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(23,115): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(24,116): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(25,77): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(40,27): warning C4018: '>=': no coinciden signed/unsigned
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\Blob.cpp(192,16): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+  EventClass.cpp
+  GraphicClass.cpp
   main.cpp
 C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\main.cpp(17,17): warning C4129: '.': secuencia de escape de carácter no reconocida
+  GoodOldBlob.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\GoodOldBlob.cpp(9,50): warning C4244: 'argumento': conversión de 'unsigned int' a 'float'; posible pérdida de datos
+  GrownBlob.cpp
+C:\Users\alanv\source\repos\EDA - TP3\EDA - TP3\GrownBlob.cpp(9,50): warning C4244: 'argumento': conversión de 'unsigned int' a 'float'; posible pérdida de datos
+  TimeClass.cpp
   Generando código...
   EDA - TP3.vcxproj -> C:\Users\alanv\source\repos\EDA - TP3\Debug\EDA - TP3.exe

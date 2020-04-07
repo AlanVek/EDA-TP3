@@ -6,10 +6,8 @@
 #include "Food.h"
 #include "GUI.h"
 
-
-
-#define MAXBLOBAMOUNT 5000
-#define FOODAMOUNT 100
+#define MAXBLOBAMOUNT 10000
+#define FOODAMOUNT 500
 //Temporary values to check correct initialization.
 /**************************************************/
 #define defaultDisplay true
@@ -53,7 +51,7 @@ public:
 
 	void drawAccordingBitmap(Blob* thisBlob);
 
-	void moveCycle(void);
+	bool moveCycle(void);
 
 	bool blobBirth(newBirth thisBirth);
 	void blobDeath(int index);

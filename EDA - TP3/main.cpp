@@ -14,7 +14,7 @@ int main()
 
     //Checks for memory allocation error.
     if (!mySim) {
-        cout << "Failed to crate simulation\.";
+        cout << "Failed to create simulation\.";
         result = false;
     }
 
@@ -27,20 +27,30 @@ int main()
             result = false;
         }
     }
-
+    //Gets first data input.
     mySim->getGUI()->GUI_firstLoop();
     if (!mySim->getFirstData())
         endOfInput = true;
+
+    //Starts timer.
     mySim->getTimeControl()->startTimer();
 
     while (mySim->getBlobAmount() && !endOfInput) {
+
+        //Ends if user presses ESC.
         if (!mySim->getGUI()->GUI_Game_Loop())
             endOfInput = true;
-        
+
+        //Gets data from GUI.
         mySim->getData();
-        
-        if (mySim->getEventControl()->getNextEventType() == ALLEGRO_EVENT_TIMER && !(mySim->getGUI()->pause))
-            mySim->moveCycle();
+
+        //Updates display every time there's a timer event.
+        if (mySim->getEventControl()->getNextEventType() == ALLEGRO_EVENT_TIMER && !(mySim->getGUI()->pause)) {
+            if (!mySim->moveCycle()) {
+                cout << "Runtime error. Couldn't create new blob.\n";
+                endOfInput = true;
+            }
+        }
     }
 
     delete mySim;
